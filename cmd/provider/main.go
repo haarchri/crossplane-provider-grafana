@@ -71,7 +71,7 @@ func main() {
 
 	rl := ratelimiter.NewGlobal(ratelimiter.DefaultGlobalRPS)
 	kingpin.FatalIfError(apis.AddToScheme(mgr.GetScheme()), "Cannot add Grafana APIs to scheme")
-	resourceMap := tf.Provider().ResourcesMap
+	resourceMap := tf.Provider(os.Getenv("TERRAFORM_PROVIDER_VERSION"))().ResourcesMap
 	kingpin.FatalIfError(controller.Setup(mgr, log, rl, setup, ws, pconfig.GetProvider(resourceMap), 1), "Cannot setup Grafana controllers")
 	kingpin.FatalIfError(mgr.Start(ctrl.SetupSignalHandler()), "Cannot start controller manager")
 }

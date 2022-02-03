@@ -22,7 +22,15 @@ package apis
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/crossplane-contrib/provider-jet-grafana/apis/hashicups/v1alpha1"
+	v1alpha1 "github.com/crossplane-contrib/provider-jet-grafana/apis/api/v1alpha1"
+	v1alpha1builtin "github.com/crossplane-contrib/provider-jet-grafana/apis/builtin/v1alpha1"
+	v1alpha1dashboard "github.com/crossplane-contrib/provider-jet-grafana/apis/dashboard/v1alpha1"
+	v1alpha1data "github.com/crossplane-contrib/provider-jet-grafana/apis/data/v1alpha1"
+	v1alpha1folder "github.com/crossplane-contrib/provider-jet-grafana/apis/folder/v1alpha1"
+	v1alpha1grafana "github.com/crossplane-contrib/provider-jet-grafana/apis/grafana/v1alpha1"
+	v1alpha1machine "github.com/crossplane-contrib/provider-jet-grafana/apis/machine/v1alpha1"
+	v1alpha1synthetic "github.com/crossplane-contrib/provider-jet-grafana/apis/synthetic/v1alpha1"
+	v1alpha1team "github.com/crossplane-contrib/provider-jet-grafana/apis/team/v1alpha1"
 	v1alpha1apis "github.com/crossplane-contrib/provider-jet-grafana/apis/v1alpha1"
 )
 
@@ -30,6 +38,14 @@ func init() {
 	// Register the types with the Scheme so the components can map objects to GroupVersionKinds and back
 	AddToSchemes = append(AddToSchemes,
 		v1alpha1.SchemeBuilder.AddToScheme,
+		v1alpha1builtin.SchemeBuilder.AddToScheme,
+		v1alpha1dashboard.SchemeBuilder.AddToScheme,
+		v1alpha1data.SchemeBuilder.AddToScheme,
+		v1alpha1folder.SchemeBuilder.AddToScheme,
+		v1alpha1grafana.SchemeBuilder.AddToScheme,
+		v1alpha1machine.SchemeBuilder.AddToScheme,
+		v1alpha1synthetic.SchemeBuilder.AddToScheme,
+		v1alpha1team.SchemeBuilder.AddToScheme,
 		v1alpha1apis.SchemeBuilder.AddToScheme,
 	)
 }

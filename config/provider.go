@@ -36,7 +36,14 @@ func GetProvider(resourceMap map[string]*schema.Resource) *tjconfig.Provider {
 	}
 
 	pc := tjconfig.NewProvider(resourceMap, resourcePrefix, modulePath,
-		tjconfig.WithDefaultResourceFn(defaultResourceFn))
+		tjconfig.WithDefaultResourceFn(defaultResourceFn),
+		tjconfig.WithSkipList([]string{
+			// Ignoring some resources that have trouble with generation
+			// TODO: Fix those
+			"grafana_alert_notification$",
+			"grafana_data_source$",
+		}),
+	)
 
 	for _, configure := range []func(provider *tjconfig.Provider){
 		// add custom config functions

@@ -31,13 +31,18 @@ import (
 )
 
 const (
-	keyUsername = "username"
-	keyPassword = "password"
-	keyHost     = "host"
+	keyUrl           = "url"
+	keyAuth          = "auth"
+	keyOrgId         = "org_id"
+	keyCloudAPIKey   = "cloud_api_key"
+	keySMAccessToken = "sm_access_token"
 
 	// Grafana credentials environment variable names
-	envUsername = "HASHICUPS_USERNAME"
-	envPassword = "HASHICUPS_PASSWORD"
+	envUrl           = "GRAFANA_URL"
+	envAuth          = "GRAFANA_AUTH"
+	envOrgId         = "GRAFANA_ORG_ID"
+	envCloudAPIKey   = "GRAFANA_CLOUD_API_URL"
+	envSMAccessToken = "GRAFANA_SM_ACCESS_TOKEN"
 )
 
 const (
@@ -87,14 +92,25 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		}
 
 		// set provider configuration
-		ps.Configuration = map[string]interface{}{
-			"host": grafanaCreds[keyHost],
+		ps.Configuration = map[string]interface{}{}
+		if url, ok := grafanaCreds[keyUrl]; ok {
+			ps.Configuration[keyUrl] = url
 		}
+		if orgId, ok := grafanaCreds[keyOrgId]; ok {
+			ps.Configuration[keyOrgId] = orgId
+		}
+
 		// set environment variables for sensitive provider configuration
-		ps.Env = []string{
-			fmt.Sprintf(fmtEnvVar, envUsername, grafanaCreds[keyUsername]),
-			fmt.Sprintf(fmtEnvVar, envPassword, grafanaCreds[keyPassword]),
+		if auth, ok := grafanaCreds[keyAuth]; ok {
+			ps.Env = append(ps.Env, fmt.Sprintf(fmtEnvVar, envAuth, auth))
 		}
+		if cloudAPIKey, ok := grafanaCreds[keyCloudAPIKey]; ok {
+			ps.Env = append(ps.Env, fmt.Sprintf(fmtEnvVar, envCloudAPIKey, cloudAPIKey))
+		}
+		if smAccessToken, ok := grafanaCreds[keySMAccessToken]; ok {
+			ps.Env = append(ps.Env, fmt.Sprintf(fmtEnvVar, envSMAccessToken, smAccessToken))
+		}
+
 		return ps, nil
 	}
 }
