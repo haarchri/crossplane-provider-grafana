@@ -31,16 +31,14 @@ import (
 )
 
 const (
-	keyUrl           = "url"
+	keyURL           = "url"
 	keyAuth          = "auth"
-	keyOrgId         = "org_id"
+	keyOrgID         = "org_id"
 	keyCloudAPIKey   = "cloud_api_key"
 	keySMAccessToken = "sm_access_token"
 
 	// Grafana credentials environment variable names
-	envUrl           = "GRAFANA_URL"
 	envAuth          = "GRAFANA_AUTH"
-	envOrgId         = "GRAFANA_ORG_ID"
 	envCloudAPIKey   = "GRAFANA_CLOUD_API_URL"
 	envSMAccessToken = "GRAFANA_SM_ACCESS_TOKEN"
 )
@@ -58,6 +56,7 @@ const (
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
 // returns Terraform provider setup configuration
+// nolint: gocyclo
 func TerraformSetupBuilder(version, providerSource, providerVersion string) terraform.SetupFn {
 	return func(ctx context.Context, client client.Client, mg resource.Managed) (terraform.Setup, error) {
 		ps := terraform.Setup{
@@ -93,11 +92,11 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 
 		// set provider configuration
 		ps.Configuration = map[string]interface{}{}
-		if url, ok := grafanaCreds[keyUrl]; ok {
-			ps.Configuration[keyUrl] = url
+		if url, ok := grafanaCreds[keyURL]; ok {
+			ps.Configuration[keyURL] = url
 		}
-		if orgId, ok := grafanaCreds[keyOrgId]; ok {
-			ps.Configuration[keyOrgId] = orgId
+		if orgID, ok := grafanaCreds[keyOrgID]; ok {
+			ps.Configuration[keyOrgID] = orgID
 		}
 
 		// set environment variables for sensitive provider configuration

@@ -34,13 +34,14 @@ func GetProvider(resourceMap map[string]*schema.Resource) *tjconfig.Provider {
 	defaultResourceFn := func(name string, terraformResource *schema.Resource, opts ...tjconfig.ResourceOption) *tjconfig.Resource {
 		words := strings.Split(name, "_")[1:] // Remove "grafana_" prefix
 		group := "grafana"
-		if words[0] == "synthetic" && words[1] == "monitoring" {
+		switch words[0] {
+		case "synthetic":
 			group = "syntheticmonitoring"
 			words = words[2:]
-		} else if words[0] == "machine" && words[1] == "learning" {
+		case "machine":
 			group = "machinelearning"
 			words = words[2:]
-		} else if words[0] == "cloud" {
+		case "cloud":
 			group = "cloud"
 			words = words[1:]
 		}
