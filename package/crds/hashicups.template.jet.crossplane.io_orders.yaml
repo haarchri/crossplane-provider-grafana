@@ -4,14 +4,14 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.6.2
   creationTimestamp: null
-  name: orders.hashicups.template.jet.crossplane.io
+  name: orders.hashicups.grafana.jet.crossplane.io
 spec:
-  group: hashicups.template.jet.crossplane.io
+  group: hashicups.grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
-    - templatejet
+    - grafanajet
     kind: Order
     listKind: OrderList
     plural: orders

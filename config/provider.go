@@ -22,8 +22,8 @@ import (
 )
 
 const (
-	resourcePrefix = "template"
-	modulePath     = "github.com/crossplane-contrib/provider-jet-template"
+	resourcePrefix = "grafana"
+	modulePath     = "github.com/crossplane-contrib/provider-jet-grafana"
 )
 
 // GetProvider returns provider configuration

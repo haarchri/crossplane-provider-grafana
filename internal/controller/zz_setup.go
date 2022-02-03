@@ -25,8 +25,8 @@ import (
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
 	"github.com/crossplane/terrajet/pkg/terraform"
 
-	order "github.com/crossplane-contrib/provider-jet-template/internal/controller/hashicups/order"
-	providerconfig "github.com/crossplane-contrib/provider-jet-template/internal/controller/providerconfig"
+	order "github.com/crossplane-contrib/provider-jet-grafana/internal/controller/hashicups/order"
+	providerconfig "github.com/crossplane-contrib/provider-jet-grafana/internal/controller/providerconfig"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
