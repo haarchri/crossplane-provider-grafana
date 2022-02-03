@@ -25,20 +25,6 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type PermissionsObservation struct {
-}
-
-type PermissionsParameters struct {
-
-	// Specific action users granted with the role will be allowed to perform (for example: `users:read`)
-	// +kubebuilder:validation:Required
-	Action *string `json:"action" tf:"action,omitempty"`
-
-	// Scope to restrict the action to a set of resources (for example: `users:*` or `roles:customrole1`)
-	// +kubebuilder:validation:Optional
-	Scope *string `json:"scope,omitempty" tf:"scope,omitempty"`
-}
-
 type RoleObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 }
@@ -55,7 +41,7 @@ type RoleParameters struct {
 
 	// Specific set of actions granted by the role.
 	// +kubebuilder:validation:Optional
-	Permissions []PermissionsParameters `json:"permissions,omitempty" tf:"permissions,omitempty"`
+	Permissions []RolePermissionsParameters `json:"permissions,omitempty" tf:"permissions,omitempty"`
 
 	// Unique identifier of the role. Used for assignments.
 	// +kubebuilder:validation:Optional
@@ -64,6 +50,20 @@ type RoleParameters struct {
 	// Version of the role. A role is updated only on version increase.
 	// +kubebuilder:validation:Required
 	Version *int64 `json:"version" tf:"version,omitempty"`
+}
+
+type RolePermissionsObservation struct {
+}
+
+type RolePermissionsParameters struct {
+
+	// Specific action users granted with the role will be allowed to perform (for example: `users:read`)
+	// +kubebuilder:validation:Required
+	Action *string `json:"action" tf:"action,omitempty"`
+
+	// Scope to restrict the action to a set of resources (for example: `users:*` or `roles:customrole1`)
+	// +kubebuilder:validation:Optional
+	Scope *string `json:"scope,omitempty" tf:"scope,omitempty"`
 }
 
 // RoleSpec defines the desired state of Role

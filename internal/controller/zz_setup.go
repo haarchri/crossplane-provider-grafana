@@ -25,48 +25,48 @@ import (
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
 	"github.com/crossplane/terrajet/pkg/terraform"
 
-	key "github.com/grafana/provider-jet-grafana/internal/controller/api/key"
-	roleassignment "github.com/grafana/provider-jet-grafana/internal/controller/builtin/roleassignment"
-	permission "github.com/grafana/provider-jet-grafana/internal/controller/dashboard/permission"
-	sourcepermission "github.com/grafana/provider-jet-grafana/internal/controller/data/sourcepermission"
-	permissionfolder "github.com/grafana/provider-jet-grafana/internal/controller/folder/permission"
+	apikey "github.com/grafana/provider-jet-grafana/internal/controller/grafana/apikey"
+	builtinroleassignment "github.com/grafana/provider-jet-grafana/internal/controller/grafana/builtinroleassignment"
 	dashboard "github.com/grafana/provider-jet-grafana/internal/controller/grafana/dashboard"
+	dashboardpermission "github.com/grafana/provider-jet-grafana/internal/controller/grafana/dashboardpermission"
+	datasourcepermission "github.com/grafana/provider-jet-grafana/internal/controller/grafana/datasourcepermission"
 	folder "github.com/grafana/provider-jet-grafana/internal/controller/grafana/folder"
+	folderpermission "github.com/grafana/provider-jet-grafana/internal/controller/grafana/folderpermission"
 	organization "github.com/grafana/provider-jet-grafana/internal/controller/grafana/organization"
 	playlist "github.com/grafana/provider-jet-grafana/internal/controller/grafana/playlist"
 	role "github.com/grafana/provider-jet-grafana/internal/controller/grafana/role"
 	team "github.com/grafana/provider-jet-grafana/internal/controller/grafana/team"
+	teamexternalgroup "github.com/grafana/provider-jet-grafana/internal/controller/grafana/teamexternalgroup"
+	teampreferences "github.com/grafana/provider-jet-grafana/internal/controller/grafana/teampreferences"
 	user "github.com/grafana/provider-jet-grafana/internal/controller/grafana/user"
-	learningjob "github.com/grafana/provider-jet-grafana/internal/controller/machine/learningjob"
+	job "github.com/grafana/provider-jet-grafana/internal/controller/machinelearning/job"
 	providerconfig "github.com/grafana/provider-jet-grafana/internal/controller/providerconfig"
-	monitoringcheck "github.com/grafana/provider-jet-grafana/internal/controller/synthetic/monitoringcheck"
-	monitoringprobe "github.com/grafana/provider-jet-grafana/internal/controller/synthetic/monitoringprobe"
-	externalgroup "github.com/grafana/provider-jet-grafana/internal/controller/team/externalgroup"
-	preferences "github.com/grafana/provider-jet-grafana/internal/controller/team/preferences"
+	check "github.com/grafana/provider-jet-grafana/internal/controller/syntheticmonitoring/check"
+	probe "github.com/grafana/provider-jet-grafana/internal/controller/syntheticmonitoring/probe"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
 // the supplied manager.
 func Setup(mgr ctrl.Manager, l logging.Logger, wl workqueue.RateLimiter, ps terraform.SetupFn, ws *terraform.WorkspaceStore, cfg *tjconfig.Provider, concurrency int) error {
 	for _, setup := range []func(ctrl.Manager, logging.Logger, workqueue.RateLimiter, terraform.SetupFn, *terraform.WorkspaceStore, *tjconfig.Provider, int) error{
-		key.Setup,
-		roleassignment.Setup,
-		permission.Setup,
-		sourcepermission.Setup,
-		permissionfolder.Setup,
+		apikey.Setup,
+		builtinroleassignment.Setup,
 		dashboard.Setup,
+		dashboardpermission.Setup,
+		datasourcepermission.Setup,
 		folder.Setup,
+		folderpermission.Setup,
 		organization.Setup,
 		playlist.Setup,
 		role.Setup,
 		team.Setup,
+		teamexternalgroup.Setup,
+		teampreferences.Setup,
 		user.Setup,
-		learningjob.Setup,
+		job.Setup,
 		providerconfig.Setup,
-		monitoringcheck.Setup,
-		monitoringprobe.Setup,
-		externalgroup.Setup,
-		preferences.Setup,
+		check.Setup,
+		probe.Setup,
 	} {
 		if err := setup(mgr, l, wl, ps, ws, cfg, concurrency); err != nil {
 			return err

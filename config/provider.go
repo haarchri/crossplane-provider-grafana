@@ -17,7 +17,10 @@ limitations under the License.
 package config
 
 import (
+	"strings"
+
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
+	tjname "github.com/crossplane/terrajet/pkg/types/name"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -29,9 +32,30 @@ const (
 // GetProvider returns provider configuration
 func GetProvider(resourceMap map[string]*schema.Resource) *tjconfig.Provider {
 	defaultResourceFn := func(name string, terraformResource *schema.Resource, opts ...tjconfig.ResourceOption) *tjconfig.Resource {
-		r := tjconfig.DefaultResource(name, terraformResource)
-		// Add any provider-specific defaulting here. For example:
-		//   r.ExternalName = tjconfig.IdentifierFromProvider
+		words := strings.Split(name, "_")[1:] // Remove "grafana_" prefix
+		group := "grafana"
+		if words[0] == "synthetic" && words[1] == "monitoring" {
+			group = "syntheticmonitoring"
+			words = words[2:]
+		} else if words[0] == "machine" && words[1] == "learning" {
+			group = "machinelearning"
+			words = words[2:]
+		} else if words[0] == "cloud" {
+			group = "cloud"
+			words = words[1:]
+		}
+
+		kind := tjname.NewFromSnake(strings.Join(words, "_")).Camel
+		r := &tjconfig.Resource{
+			Name:              name,
+			TerraformResource: terraformResource,
+			ShortGroup:        group,
+			Kind:              kind,
+			Version:           "v1alpha1",
+			ExternalName:      tjconfig.NameAsIdentifier,
+			References:        map[string]tjconfig.Reference{},
+			Sensitive:         tjconfig.NopSensitive,
+		}
 		return r
 	}
 
