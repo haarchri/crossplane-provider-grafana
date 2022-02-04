@@ -1,0 +1,13 @@
+apiVersion: grafana.grafana.jet.crossplane.io/v1alpha1
+kind: Dashboard
+metadata:
+  name: hello-crossplane
+spec:
+  forProvider:
+    configJson: |
+      {
+        "title": "Crossplane Test!",
+        "uid": "crossplane",
+      }
+  providerConfigRef:
+    name: grafana-provider
