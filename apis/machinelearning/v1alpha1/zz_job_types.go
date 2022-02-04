@@ -55,6 +55,10 @@ type JobParameters struct {
 	// +kubebuilder:validation:Required
 	Metric *string `json:"metric" tf:"metric,omitempty"`
 
+	// The name of the job.
+	// +kubebuilder:validation:Required
+	Name *string `json:"name" tf:"name,omitempty"`
+
 	// An object representing the query params to query Grafana with.
 	// +kubebuilder:validation:Required
 	QueryParams map[string]string `json:"queryParams" tf:"query_params,omitempty"`

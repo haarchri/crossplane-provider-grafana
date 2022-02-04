@@ -94,6 +94,9 @@ spec:
                     items:
                       type: string
                     type: array
+                  name:
+                    description: The display name for the Grafana organization created.
+                    type: string
                   viewers:
                     description: 'A list of email addresses corresponding to users
                       who should be given viewer access to the organization. Note:
@@ -102,6 +105,8 @@ spec:
                     items:
                       type: string
                     type: array
+                required:
+                - name
                 type: object
               providerConfigRef:
                 default:

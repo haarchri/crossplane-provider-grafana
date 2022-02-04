@@ -53,7 +53,7 @@ func GetProvider(resourceMap map[string]*schema.Resource) *tjconfig.Provider {
 			ShortGroup:        group,
 			Kind:              kind,
 			Version:           "v1alpha1",
-			ExternalName:      tjconfig.NameAsIdentifier,
+			ExternalName:      tjconfig.IdentifierFromProvider,
 			References:        map[string]tjconfig.Reference{},
 			Sensitive:         tjconfig.NopSensitive,
 		}

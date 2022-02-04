@@ -45,6 +45,10 @@ type UserParameters struct {
 	// +kubebuilder:validation:Optional
 	Login *string `json:"login,omitempty" tf:"login,omitempty"`
 
+	// The display name for the Grafana user.
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
 	// The password for the Grafana user.
 	// +kubebuilder:validation:Required
 	PasswordSecretRef v1.SecretKeySelector `json:"passwordSecretRef" tf:"-"`

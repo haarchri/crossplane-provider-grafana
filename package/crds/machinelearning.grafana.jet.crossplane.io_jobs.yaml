@@ -87,6 +87,9 @@ spec:
                   metric:
                     description: The metric used to query the job results.
                     type: string
+                  name:
+                    description: The name of the job.
+                    type: string
                   queryParams:
                     additionalProperties:
                       type: string
@@ -101,6 +104,7 @@ spec:
                 - datasourceId
                 - datasourceType
                 - metric
+                - name
                 - queryParams
                 type: object
               providerConfigRef:

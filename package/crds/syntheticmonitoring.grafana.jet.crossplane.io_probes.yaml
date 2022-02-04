@@ -74,6 +74,9 @@ spec:
                   longitude:
                     description: Longitude coordinates.
                     type: number
+                  name:
+                    description: Name of the probe.
+                    type: string
                   public:
                     description: Public probes are run by Grafana Labs and can be
                       used by all users. Only Grafana Labs managed public probes will
@@ -85,6 +88,7 @@ spec:
                 required:
                 - latitude
                 - longitude
+                - name
                 - region
                 type: object
               providerConfigRef:

@@ -41,6 +41,10 @@ type TeamParameters struct {
 	// to the team. Note: users specified here must already exist in Grafana.
 	// +kubebuilder:validation:Optional
 	Members []*string `json:"members,omitempty" tf:"members,omitempty"`
+
+	// The display name for the Grafana team created.
+	// +kubebuilder:validation:Required
+	Name *string `json:"name" tf:"name,omitempty"`
 }
 
 // TeamSpec defines the desired state of Team

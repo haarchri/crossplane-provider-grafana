@@ -39,6 +39,10 @@ type RoleParameters struct {
 	// +kubebuilder:validation:Optional
 	Global *bool `json:"global,omitempty" tf:"global,omitempty"`
 
+	// Name of the role
+	// +kubebuilder:validation:Required
+	Name *string `json:"name" tf:"name,omitempty"`
+
 	// Specific set of actions granted by the role.
 	// +kubebuilder:validation:Optional
 	Permissions []RolePermissionsParameters `json:"permissions,omitempty" tf:"permissions,omitempty"`

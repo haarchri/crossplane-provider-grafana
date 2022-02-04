@@ -72,6 +72,11 @@ spec:
                     items:
                       type: string
                     type: array
+                  name:
+                    description: The display name for the Grafana team created.
+                    type: string
+                required:
+                - name
                 type: object
               providerConfigRef:
                 default:

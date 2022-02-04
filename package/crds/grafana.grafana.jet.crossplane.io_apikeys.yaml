@@ -62,12 +62,15 @@ spec:
                 type: string
               forProvider:
                 properties:
+                  name:
+                    type: string
                   role:
                     type: string
                   secondsToLive:
                     format: int64
                     type: integer
                 required:
+                - name
                 - role
                 type: object
               providerConfigRef:
