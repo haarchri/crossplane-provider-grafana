@@ -1,13 +1,9 @@
 apiVersion: grafana.grafana.jet.crossplane.io/v1alpha1
-kind: Dashboard
+kind: Folder
 metadata:
   name: hello-crossplane
 spec:
   forProvider:
-    configJson: |
-      {
-        "title": "Crossplane Test!",
-        "uid": "crossplane"
-      }
+    title: 'Crossplane Test!'
   providerConfigRef:
     name: grafana-provider
