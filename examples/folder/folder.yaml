@@ -4,6 +4,6 @@ metadata:
   name: hello-crossplane
 spec:
   forProvider:
-    title: 'Crossplane Test!'
+    title: 'Crossplane Folder Test!'
   providerConfigRef:
     name: grafana-provider
