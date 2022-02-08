@@ -1,7 +1,7 @@
 # ====================================================================================
 # Setup Project
 
-PROJECT_NAME := provider-jet-grafana
+PROJECT_NAME := crossplane-provider-grafana
 PROJECT_REPO := github.com/grafana/$(PROJECT_NAME)
 
 export TERRAFORM_VERSION := 1.0.11
@@ -50,7 +50,7 @@ GO111MODULE = on
 # Setup Images
 
 DOCKER_REGISTRY ?= jduchesnegrafana
-IMAGES = provider-jet-grafana provider-jet-grafana-controller
+IMAGES = crossplane-provider-grafana crossplane-provider-grafana-controller
 -include build/makelib/image.mk
 
 # ====================================================================================

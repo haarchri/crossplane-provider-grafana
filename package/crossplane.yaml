@@ -1,7 +1,7 @@
 apiVersion: meta.pkg.crossplane.io/v1alpha1
 kind: Provider
 metadata:
-  name: provider-jet-grafana
+  name: crossplane-provider-grafana
 spec:
   controller:
-    image: DOCKER_REGISTRY/provider-jet-grafana-controller:VERSION
+    image: DOCKER_REGISTRY/crossplane-provider-grafana-controller:VERSION

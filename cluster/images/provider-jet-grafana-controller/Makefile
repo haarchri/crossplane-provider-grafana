@@ -6,7 +6,7 @@ include ../../../build/makelib/common.mk
 
 # ====================================================================================
 #  Options
-IMAGE = $(BUILD_REGISTRY)/provider-jet-grafana-controller-$(ARCH)
+IMAGE = $(BUILD_REGISTRY)/crossplane-provider-grafana-controller-$(ARCH)
 include ../../../build/makelib/image.mk
 
 # ====================================================================================

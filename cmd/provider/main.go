@@ -28,10 +28,10 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	"github.com/grafana/provider-jet-grafana/apis"
-	pconfig "github.com/grafana/provider-jet-grafana/config"
-	"github.com/grafana/provider-jet-grafana/internal/clients"
-	"github.com/grafana/provider-jet-grafana/internal/controller"
+	"github.com/grafana/crossplane-provider-grafana/apis"
+	pconfig "github.com/grafana/crossplane-provider-grafana/config"
+	"github.com/grafana/crossplane-provider-grafana/internal/clients"
+	"github.com/grafana/crossplane-provider-grafana/internal/controller"
 )
 
 func main() {
@@ -47,7 +47,7 @@ func main() {
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 
 	zl := zap.New(zap.UseDevMode(*debug))
-	log := logging.NewLogrLogger(zl.WithName("provider-jet-grafana"))
+	log := logging.NewLogrLogger(zl.WithName("crossplane-provider-grafana"))
 	if *debug {
 		// The controller-runtime runs with a no-op logger by default. It is
 		// *very* verbose even at info level, so we only provide it a real
@@ -62,7 +62,7 @@ func main() {
 
 	mgr, err := ctrl.NewManager(cfg, ctrl.Options{
 		LeaderElection:   *leaderElection,
-		LeaderElectionID: "crossplane-leader-election-provider-jet-grafana",
+		LeaderElectionID: "crossplane-leader-election-crossplane-provider-grafana",
 		SyncPeriod:       syncPeriod,
 	})
 	kingpin.FatalIfError(err, "Cannot create controller manager")

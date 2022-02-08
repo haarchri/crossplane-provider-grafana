@@ -22,10 +22,10 @@ package apis
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/grafana/provider-jet-grafana/apis/grafana/v1alpha1"
-	v1alpha1machinelearning "github.com/grafana/provider-jet-grafana/apis/machinelearning/v1alpha1"
-	v1alpha1syntheticmonitoring "github.com/grafana/provider-jet-grafana/apis/syntheticmonitoring/v1alpha1"
-	v1alpha1apis "github.com/grafana/provider-jet-grafana/apis/v1alpha1"
+	v1alpha1 "github.com/grafana/crossplane-provider-grafana/apis/grafana/v1alpha1"
+	v1alpha1machinelearning "github.com/grafana/crossplane-provider-grafana/apis/machinelearning/v1alpha1"
+	v1alpha1syntheticmonitoring "github.com/grafana/crossplane-provider-grafana/apis/syntheticmonitoring/v1alpha1"
+	v1alpha1apis "github.com/grafana/crossplane-provider-grafana/apis/v1alpha1"
 )
 
 func init() {

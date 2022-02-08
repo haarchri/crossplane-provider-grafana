@@ -7,7 +7,7 @@ include ../../../build/makelib/common.mk
 # ====================================================================================
 #  Options
 DOCKER_REGISTRY ?= crossplane
-IMAGE = $(BUILD_REGISTRY)/provider-jet-grafana-$(ARCH)
+IMAGE = $(BUILD_REGISTRY)/crossplane-provider-grafana-$(ARCH)
 OSBASEIMAGE = scratch
 include ../../../build/makelib/image.mk
 

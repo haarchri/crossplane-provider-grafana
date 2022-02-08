@@ -27,7 +27,7 @@ import (
 	tf "github.com/grafana/terraform-provider-grafana/grafana"
 
 	"github.com/crossplane/terrajet/pkg/pipeline"
-	"github.com/grafana/provider-jet-grafana/config"
+	"github.com/grafana/crossplane-provider-grafana/config"
 )
 
 func main() {

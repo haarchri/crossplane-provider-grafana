@@ -34,7 +34,7 @@ import (
 	tjcontroller "github.com/crossplane/terrajet/pkg/controller"
 	"github.com/crossplane/terrajet/pkg/terraform"
 
-	v1alpha1 "github.com/grafana/provider-jet-grafana/apis/grafana/v1alpha1"
+	v1alpha1 "github.com/grafana/crossplane-provider-grafana/apis/grafana/v1alpha1"
 )
 
 // Setup adds a controller that reconciles Folder managed resources.

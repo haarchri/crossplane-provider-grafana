@@ -1,4 +1,4 @@
-module github.com/grafana/provider-jet-grafana
+module github.com/grafana/crossplane-provider-grafana
 
 go 1.16
 

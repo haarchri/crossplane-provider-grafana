@@ -30,7 +30,7 @@ import (
 	"github.com/crossplane/crossplane-runtime/pkg/reconciler/providerconfig"
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 
-	"github.com/grafana/provider-jet-grafana/apis/v1alpha1"
+	"github.com/grafana/crossplane-provider-grafana/apis/v1alpha1"
 )
 
 // Setup adds a controller that reconciles ProviderConfigs by accounting for
