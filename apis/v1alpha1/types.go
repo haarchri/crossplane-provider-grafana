@@ -26,6 +26,9 @@ import (
 type ProviderConfigSpec struct {
 	// Credentials required to authenticate to this provider.
 	Credentials ProviderCredentials `json:"credentials"`
+
+	// OrgId of the organization in which to reconcile resources.
+	OrgId string `json:"orgId"`
 }
 
 // ProviderCredentials required to authenticate.

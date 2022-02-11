@@ -41,6 +41,10 @@ const (
 	envAuth          = "GRAFANA_AUTH"
 	envCloudAPIKey   = "GRAFANA_CLOUD_API_URL"
 	envSMAccessToken = "GRAFANA_SM_ACCESS_TOKEN"
+
+	// Grafana non-sensitive environment variable names
+
+	envOrgId = "GRAFANA_ORG_ID"
 )
 
 const (
@@ -97,6 +101,14 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		}
 		if orgID, ok := grafanaCreds[keyOrgID]; ok {
 			ps.Configuration[keyOrgID] = orgID
+		}
+
+		// default to  OrgId 1 if not specified
+		ps.Configuration[keyOrgID] = 1
+		orgid := pc.DeepCopy().Spec.OrgId
+		if len(orgid) > 0 {
+			ps.Configuration[keyOrgID] = orgid
+			ps.Env = append(ps.Env, fmt.Sprintf(fmtEnvVar, envOrgId, orgid))
 		}
 
 		// set environment variables for sensitive provider configuration

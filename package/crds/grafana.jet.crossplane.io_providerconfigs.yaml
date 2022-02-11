@@ -99,8 +99,12 @@ spec:
                 required:
                 - source
                 type: object
+              orgId:
+                description: OrgId of the organization in which to reconcile resources.
+                type: string
             required:
             - credentials
+            - orgId
             type: object
           status:
             description: A ProviderConfigStatus reflects the observed state of a ProviderConfig.
