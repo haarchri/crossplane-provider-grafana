@@ -3,7 +3,7 @@ kind: ProviderConfig
 metadata:
   name: grafana-provider
 spec:
-  orgId: 1
+  orgID: 1
   credentials:
     source: Secret
     secretRef:

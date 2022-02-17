@@ -44,11 +44,12 @@ const (
 
 	// Grafana non-sensitive environment variable names
 
-	envOrgId = "GRAFANA_ORG_ID"
+	envOrgID = "GRAFANA_ORG_ID"
 )
 
 const (
-	fmtEnvVar = "%s=%s"
+	fmtEnvVar        = "%s=%s"
+	fmtEnvVarFromInt = "%s=%d"
 
 	// error messages
 	errNoProviderConfig     = "no providerConfigRef provided"
@@ -103,12 +104,12 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			ps.Configuration[keyOrgID] = orgID
 		}
 
-		// default to  OrgId 1 if not specified
+		// default to  OrgID 1 if not specified
 		ps.Configuration[keyOrgID] = 1
-		orgid := pc.DeepCopy().Spec.OrgId
-		if len(orgid) > 0 {
+		orgid := pc.Spec.OrgID
+		if orgid > 0 {
 			ps.Configuration[keyOrgID] = orgid
-			ps.Env = append(ps.Env, fmt.Sprintf(fmtEnvVar, envOrgId, orgid))
+			ps.Env = append(ps.Env, fmt.Sprintf(fmtEnvVarFromInt, envOrgID, orgid))
 		}
 
 		// set environment variables for sensitive provider configuration
