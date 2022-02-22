@@ -95,9 +95,6 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 		if url, ok := grafanaCreds[keyURL]; ok {
 			ps.Configuration[keyURL] = url
 		}
-		if orgID, ok := grafanaCreds[keyOrgID]; ok {
-			ps.Configuration[keyOrgID] = orgID
-		}
 
 		// default to  OrgID 1 if not specified
 		ps.Configuration[keyOrgID] = 1
