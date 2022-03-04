@@ -99,6 +99,9 @@ spec:
                 required:
                 - source
                 type: object
+              orgID:
+                description: OrgID of the organization in which to reconcile resources.
+                type: integer
             required:
             - credentials
             type: object
