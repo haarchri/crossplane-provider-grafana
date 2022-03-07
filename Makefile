@@ -49,6 +49,7 @@ GO111MODULE = on
 # ====================================================================================
 # Setup Images
 
+SPACE := $(null) $(null)
 DOCKER_REGISTRY ?= duologic
 IMAGES = crossplane-provider-grafana crossplane-provider-grafana-controller
 -include build/makelib/image.mk
