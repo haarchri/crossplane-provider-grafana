@@ -49,7 +49,7 @@ GO111MODULE = on
 # ====================================================================================
 # Setup Images
 
-DOCKER_REGISTRY ?= jduchesnegrafana
+DOCKER_REGISTRY ?= grafana
 IMAGES = crossplane-provider-grafana crossplane-provider-grafana-controller
 -include build/makelib/image.mk
 
