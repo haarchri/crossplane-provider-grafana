@@ -49,7 +49,7 @@ GO111MODULE = on
 # ====================================================================================
 # Setup Images
 
-DOCKER_REGISTRY ?= grafana
+DOCKER_REGISTRY ?= duologic
 IMAGES = crossplane-provider-grafana crossplane-provider-grafana-controller
 -include build/makelib/image.mk
 
