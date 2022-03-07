@@ -28,7 +28,7 @@ import (
 type OrganizationObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	OrgID *int64 `json:"orgId,omitempty" tf:"org_id,omitempty"`
+	OrgID *float64 `json:"orgId,omitempty" tf:"org_id,omitempty"`
 }
 
 type OrganizationParameters struct {
@@ -38,6 +38,7 @@ type OrganizationParameters struct {
 	// Grafana adds the default admin user to all organizations automatically upon
 	// creation, and this parameter keeps Terraform from removing it from
 	// organizations.
+	// Defaults to `admin`.
 	// +kubebuilder:validation:Optional
 	AdminUser *string `json:"adminUser,omitempty" tf:"admin_user,omitempty"`
 
@@ -53,6 +54,7 @@ type OrganizationParameters struct {
 	// and email set to the email of the user, and a random password. Setting this
 	// option to false will cause an error to be thrown for any users that do not
 	// already exist in Grafana.
+	// Defaults to `true`.
 	// +kubebuilder:validation:Optional
 	CreateUsers *bool `json:"createUsers,omitempty" tf:"create_users,omitempty"`
 
@@ -61,10 +63,6 @@ type OrganizationParameters struct {
 	// Grafana unless 'create_users' is set to true.
 	// +kubebuilder:validation:Optional
 	Editors []*string `json:"editors,omitempty" tf:"editors,omitempty"`
-
-	// The display name for the Grafana organization created.
-	// +kubebuilder:validation:Required
-	Name *string `json:"name" tf:"name,omitempty"`
 
 	// A list of email addresses corresponding to users who should be given viewer
 	// access to the organization. Note: users specified here must already exist in

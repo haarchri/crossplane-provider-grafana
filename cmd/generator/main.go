@@ -1,5 +1,4 @@
 //go:build generate
-// +build generate
 
 /*
 Copyright 2021 The Crossplane Authors.
@@ -24,9 +23,8 @@ import (
 	"os"
 	"path/filepath"
 
-	tf "github.com/grafana/terraform-provider-grafana/grafana"
-
 	"github.com/crossplane/terrajet/pkg/pipeline"
+
 	"github.com/grafana/crossplane-provider-grafana/config"
 )
 
@@ -38,6 +36,5 @@ func main() {
 	if err != nil {
 		panic(fmt.Sprintf("cannot calculate the absolute path of %s", os.Args[1]))
 	}
-	resourceMap := tf.Provider(os.Getenv("TERRAFORM_PROVIDER_VERSION"))().ResourcesMap
-	pipeline.Run(config.GetProvider(resourceMap), absRootDir)
+	pipeline.Run(config.GetProvider(), absRootDir)
 }

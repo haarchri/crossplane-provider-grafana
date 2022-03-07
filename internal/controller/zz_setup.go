@@ -17,58 +17,58 @@ limitations under the License.
 package controller
 
 import (
-	"k8s.io/client-go/util/workqueue"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	"github.com/crossplane/crossplane-runtime/pkg/logging"
+	"github.com/crossplane/terrajet/pkg/controller"
 
-	tjconfig "github.com/crossplane/terrajet/pkg/config"
-	"github.com/crossplane/terrajet/pkg/terraform"
-
-	apikey "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/apikey"
-	builtinroleassignment "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/builtinroleassignment"
+	notification "github.com/grafana/crossplane-provider-grafana/internal/controller/alert/notification"
+	key "github.com/grafana/crossplane-provider-grafana/internal/controller/api/key"
+	roleassignment "github.com/grafana/crossplane-provider-grafana/internal/controller/builtin/roleassignment"
+	permission "github.com/grafana/crossplane-provider-grafana/internal/controller/dashboard/permission"
+	source "github.com/grafana/crossplane-provider-grafana/internal/controller/data/source"
+	sourcepermission "github.com/grafana/crossplane-provider-grafana/internal/controller/data/sourcepermission"
+	permissionfolder "github.com/grafana/crossplane-provider-grafana/internal/controller/folder/permission"
 	dashboard "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/dashboard"
-	dashboardpermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/dashboardpermission"
-	datasourcepermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/datasourcepermission"
 	folder "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/folder"
-	folderpermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/folderpermission"
 	organization "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/organization"
 	playlist "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/playlist"
 	role "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/role"
 	team "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/team"
-	teamexternalgroup "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/teamexternalgroup"
-	teampreferences "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/teampreferences"
 	user "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/user"
-	job "github.com/grafana/crossplane-provider-grafana/internal/controller/machinelearning/job"
+	learningjob "github.com/grafana/crossplane-provider-grafana/internal/controller/machine/learningjob"
 	providerconfig "github.com/grafana/crossplane-provider-grafana/internal/controller/providerconfig"
-	check "github.com/grafana/crossplane-provider-grafana/internal/controller/syntheticmonitoring/check"
-	probe "github.com/grafana/crossplane-provider-grafana/internal/controller/syntheticmonitoring/probe"
+	monitoringcheck "github.com/grafana/crossplane-provider-grafana/internal/controller/synthetic/monitoringcheck"
+	monitoringprobe "github.com/grafana/crossplane-provider-grafana/internal/controller/synthetic/monitoringprobe"
+	externalgroup "github.com/grafana/crossplane-provider-grafana/internal/controller/team/externalgroup"
+	preferences "github.com/grafana/crossplane-provider-grafana/internal/controller/team/preferences"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
 // the supplied manager.
-func Setup(mgr ctrl.Manager, l logging.Logger, wl workqueue.RateLimiter, ps terraform.SetupFn, ws *terraform.WorkspaceStore, cfg *tjconfig.Provider, concurrency int) error {
-	for _, setup := range []func(ctrl.Manager, logging.Logger, workqueue.RateLimiter, terraform.SetupFn, *terraform.WorkspaceStore, *tjconfig.Provider, int) error{
-		apikey.Setup,
-		builtinroleassignment.Setup,
+func Setup(mgr ctrl.Manager, o controller.Options) error {
+	for _, setup := range []func(ctrl.Manager, controller.Options) error{
+		notification.Setup,
+		key.Setup,
+		roleassignment.Setup,
+		permission.Setup,
+		source.Setup,
+		sourcepermission.Setup,
+		permissionfolder.Setup,
 		dashboard.Setup,
-		dashboardpermission.Setup,
-		datasourcepermission.Setup,
 		folder.Setup,
-		folderpermission.Setup,
 		organization.Setup,
 		playlist.Setup,
 		role.Setup,
 		team.Setup,
-		teamexternalgroup.Setup,
-		teampreferences.Setup,
 		user.Setup,
-		job.Setup,
+		learningjob.Setup,
 		providerconfig.Setup,
-		check.Setup,
-		probe.Setup,
+		monitoringcheck.Setup,
+		monitoringprobe.Setup,
+		externalgroup.Setup,
+		preferences.Setup,
 	} {
-		if err := setup(mgr, l, wl, ps, ws, cfg, concurrency); err != nil {
+		if err := setup(mgr, o); err != nil {
 			return err
 		}
 	}

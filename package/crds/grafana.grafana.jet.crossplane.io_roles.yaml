@@ -1,8 +1,9 @@
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.2
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: roles.grafana.grafana.jet.crossplane.io
 spec:
@@ -67,11 +68,8 @@ spec:
                     type: string
                   global:
                     description: Boolean to state whether the role is available across
-                      all organizations or not.
+                      all organizations or not. Defaults to `false`.
                     type: boolean
-                  name:
-                    description: Name of the role
-                    type: string
                   permissions:
                     description: Specific set of actions granted by the role.
                     items:
@@ -94,10 +92,8 @@ spec:
                   version:
                     description: Version of the role. A role is updated only on version
                       increase.
-                    format: int64
-                    type: integer
+                    type: number
                 required:
-                - name
                 - version
                 type: object
               providerConfigRef:
