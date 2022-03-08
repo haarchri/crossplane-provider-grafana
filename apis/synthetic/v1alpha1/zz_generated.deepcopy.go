@@ -719,6 +719,11 @@ func (in *MonitoringProbeParameters) DeepCopyInto(out *MonitoringProbeParameters
 		*out = new(float64)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.Public != nil {
 		in, out := &in.Public, &out.Public
 		*out = new(bool)

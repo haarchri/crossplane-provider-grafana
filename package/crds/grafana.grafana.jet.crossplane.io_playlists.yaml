@@ -81,9 +81,13 @@ spec:
                       - title
                       type: object
                     type: array
+                  name:
+                    description: The name of the playlist.
+                    type: string
                 required:
                 - interval
                 - item
+                - name
                 type: object
               providerConfigRef:
                 default:

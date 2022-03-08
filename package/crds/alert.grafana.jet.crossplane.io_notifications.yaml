@@ -75,6 +75,9 @@ spec:
                     description: Is this the default channel for all your alerts.
                       Defaults to `false`.
                     type: boolean
+                  name:
+                    description: The name of the alert notification channel.
+                    type: string
                   secureSettingsSecretRef:
                     additionalProperties:
                       description: A SecretKeySelector is a reference to a secret
@@ -115,6 +118,7 @@ spec:
                       generated.
                     type: string
                 required:
+                - name
                 - type
                 type: object
               providerConfigRef:

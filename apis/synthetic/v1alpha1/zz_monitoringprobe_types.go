@@ -45,6 +45,10 @@ type MonitoringProbeParameters struct {
 	// +kubebuilder:validation:Required
 	Longitude *float64 `json:"longitude" tf:"longitude,omitempty"`
 
+	// Name of the probe.
+	// +kubebuilder:validation:Required
+	Name *string `json:"name" tf:"name,omitempty"`
+
 	// Public probes are run by Grafana Labs and can be used by all users. Only Grafana Labs managed public probes will be set to `true`. Defaults to `false`.
 	// +kubebuilder:validation:Optional
 	Public *bool `json:"public,omitempty" tf:"public,omitempty"`

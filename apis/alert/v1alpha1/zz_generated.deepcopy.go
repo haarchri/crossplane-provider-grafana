@@ -123,6 +123,11 @@ func (in *NotificationParameters) DeepCopyInto(out *NotificationParameters) {
 		*out = new(bool)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.SecureSettingsSecretRef != nil {
 		in, out := &in.SecureSettingsSecretRef, &out.SecureSettingsSecretRef
 		*out = make(map[string]v1.SecretKeySelector, len(*in))

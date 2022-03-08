@@ -72,6 +72,9 @@ spec:
                   login:
                     description: The username for the Grafana user.
                     type: string
+                  name:
+                    description: The display name for the Grafana user.
+                    type: string
                   passwordSecretRef:
                     description: The password for the Grafana user.
                     properties:

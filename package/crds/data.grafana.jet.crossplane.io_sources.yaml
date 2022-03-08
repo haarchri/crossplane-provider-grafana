@@ -272,6 +272,9 @@ spec:
                           type: string
                       type: object
                     type: array
+                  name:
+                    description: A unique name for the data source.
+                    type: string
                   passwordSecretRef:
                     description: (Required by some data source types) The password
                       to use to authenticate to the data source. Defaults to ``.
@@ -487,6 +490,7 @@ spec:
                       to use to authenticate to the data source. Defaults to ``.
                     type: string
                 required:
+                - name
                 - type
                 type: object
               providerConfigRef:

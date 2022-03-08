@@ -147,6 +147,11 @@ func (in *LearningJobParameters) DeepCopyInto(out *LearningJobParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.QueryParams != nil {
 		in, out := &in.QueryParams, &out.QueryParams
 		*out = make(map[string]*string, len(*in))

@@ -263,6 +263,10 @@ type SourceParameters struct {
 	// +kubebuilder:validation:Optional
 	JSONData []JSONDataParameters `json:"jsonData,omitempty" tf:"json_data,omitempty"`
 
+	// A unique name for the data source.
+	// +kubebuilder:validation:Required
+	Name *string `json:"name" tf:"name,omitempty"`
+
 	// (Required by some data source types) The password to use to authenticate to the data source. Defaults to ``.
 	// +kubebuilder:validation:Optional
 	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`

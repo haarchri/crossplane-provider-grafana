@@ -492,6 +492,11 @@ func (in *SourceParameters) DeepCopyInto(out *SourceParameters) {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
+	if in.Name != nil {
+		in, out := &in.Name, &out.Name
+		*out = new(string)
+		**out = **in
+	}
 	if in.PasswordSecretRef != nil {
 		in, out := &in.PasswordSecretRef, &out.PasswordSecretRef
 		*out = new(v1.SecretKeySelector)

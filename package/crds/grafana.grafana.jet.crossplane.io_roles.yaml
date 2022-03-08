@@ -70,6 +70,9 @@ spec:
                     description: Boolean to state whether the role is available across
                       all organizations or not. Defaults to `false`.
                     type: boolean
+                  name:
+                    description: Name of the role
+                    type: string
                   permissions:
                     description: Specific set of actions granted by the role.
                     items:
@@ -94,6 +97,7 @@ spec:
                       increase.
                     type: number
                 required:
+                - name
                 - version
                 type: object
               providerConfigRef:

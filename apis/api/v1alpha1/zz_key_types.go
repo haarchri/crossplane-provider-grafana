@@ -34,6 +34,9 @@ type KeyObservation struct {
 type KeyParameters struct {
 
 	// +kubebuilder:validation:Required
+	Name *string `json:"name" tf:"name,omitempty"`
+
+	// +kubebuilder:validation:Required
 	Role *string `json:"role" tf:"role,omitempty"`
 
 	// +kubebuilder:validation:Optional

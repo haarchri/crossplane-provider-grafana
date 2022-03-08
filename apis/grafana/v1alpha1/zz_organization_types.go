@@ -64,6 +64,10 @@ type OrganizationParameters struct {
 	// +kubebuilder:validation:Optional
 	Editors []*string `json:"editors,omitempty" tf:"editors,omitempty"`
 
+	// The display name for the Grafana organization created.
+	// +kubebuilder:validation:Required
+	Name *string `json:"name" tf:"name,omitempty"`
+
 	// A list of email addresses corresponding to users who should be given viewer
 	// access to the organization. Note: users specified here must already exist in
 	// Grafana unless 'create_users' is set to true.

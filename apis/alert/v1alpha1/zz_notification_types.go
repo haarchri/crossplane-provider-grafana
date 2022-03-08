@@ -43,6 +43,10 @@ type NotificationParameters struct {
 	// +kubebuilder:validation:Optional
 	IsDefault *bool `json:"isDefault,omitempty" tf:"is_default,omitempty"`
 
+	// The name of the alert notification channel.
+	// +kubebuilder:validation:Required
+	Name *string `json:"name" tf:"name,omitempty"`
+
 	// Additional secure settings, for full reference lookup [Grafana Supported Settings documentation](https://grafana.com/docs/grafana/latest/administration/provisioning/#supported-settings).
 	// +kubebuilder:validation:Optional
 	SecureSettingsSecretRef map[string]v1.SecretKeySelector `json:"secureSettingsSecretRef" tf:"-"`

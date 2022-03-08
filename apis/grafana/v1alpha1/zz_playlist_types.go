@@ -57,6 +57,10 @@ type PlaylistParameters struct {
 
 	// +kubebuilder:validation:Required
 	Item []ItemParameters `json:"item" tf:"item,omitempty"`
+
+	// The name of the playlist.
+	// +kubebuilder:validation:Required
+	Name *string `json:"name" tf:"name,omitempty"`
 }
 
 // PlaylistSpec defines the desired state of Playlist
