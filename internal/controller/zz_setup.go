@@ -21,52 +21,52 @@ import (
 
 	"github.com/crossplane/terrajet/pkg/controller"
 
-	notification "github.com/grafana/crossplane-provider-grafana/internal/controller/alert/notification"
-	key "github.com/grafana/crossplane-provider-grafana/internal/controller/api/key"
-	roleassignment "github.com/grafana/crossplane-provider-grafana/internal/controller/builtin/roleassignment"
-	permission "github.com/grafana/crossplane-provider-grafana/internal/controller/dashboard/permission"
-	source "github.com/grafana/crossplane-provider-grafana/internal/controller/data/source"
-	sourcepermission "github.com/grafana/crossplane-provider-grafana/internal/controller/data/sourcepermission"
-	permissionfolder "github.com/grafana/crossplane-provider-grafana/internal/controller/folder/permission"
+	alertnotification "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/alertnotification"
+	apikey "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/apikey"
+	builtinroleassignment "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/builtinroleassignment"
 	dashboard "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/dashboard"
+	dashboardpermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/dashboardpermission"
+	datasource "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/datasource"
+	datasourcepermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/datasourcepermission"
 	folder "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/folder"
+	folderpermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/folderpermission"
+	machinelearningjob "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/machinelearningjob"
 	organization "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/organization"
 	playlist "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/playlist"
 	role "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/role"
+	syntheticmonitoringcheck "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringcheck"
+	syntheticmonitoringprobe "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringprobe"
 	team "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/team"
+	teamexternalgroup "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/teamexternalgroup"
+	teampreferences "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/teampreferences"
 	user "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/user"
-	learningjob "github.com/grafana/crossplane-provider-grafana/internal/controller/machine/learningjob"
 	providerconfig "github.com/grafana/crossplane-provider-grafana/internal/controller/providerconfig"
-	monitoringcheck "github.com/grafana/crossplane-provider-grafana/internal/controller/synthetic/monitoringcheck"
-	monitoringprobe "github.com/grafana/crossplane-provider-grafana/internal/controller/synthetic/monitoringprobe"
-	externalgroup "github.com/grafana/crossplane-provider-grafana/internal/controller/team/externalgroup"
-	preferences "github.com/grafana/crossplane-provider-grafana/internal/controller/team/preferences"
 )
 
 // Setup creates all controllers with the supplied logger and adds them to
 // the supplied manager.
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
-		notification.Setup,
-		key.Setup,
-		roleassignment.Setup,
-		permission.Setup,
-		source.Setup,
-		sourcepermission.Setup,
-		permissionfolder.Setup,
+		alertnotification.Setup,
+		apikey.Setup,
+		builtinroleassignment.Setup,
 		dashboard.Setup,
+		dashboardpermission.Setup,
+		datasource.Setup,
+		datasourcepermission.Setup,
 		folder.Setup,
+		folderpermission.Setup,
+		machinelearningjob.Setup,
 		organization.Setup,
 		playlist.Setup,
 		role.Setup,
+		syntheticmonitoringcheck.Setup,
+		syntheticmonitoringprobe.Setup,
 		team.Setup,
+		teamexternalgroup.Setup,
+		teampreferences.Setup,
 		user.Setup,
-		learningjob.Setup,
 		providerconfig.Setup,
-		monitoringcheck.Setup,
-		monitoringprobe.Setup,
-		externalgroup.Setup,
-		preferences.Setup,
 	} {
 		if err := setup(mgr, o); err != nil {
 			return err

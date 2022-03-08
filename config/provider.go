@@ -19,8 +19,10 @@ package config
 import (
 	// Note(turkenh): we are importing this to embed provider schema document
 	_ "embed"
+	"strings"
 
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
+	tjname "github.com/crossplane/terrajet/pkg/types/name"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -36,6 +38,11 @@ var providerSchema string
 func GetProvider() *tjconfig.Provider {
 	defaultResourceFn := func(name string, terraformResource *schema.Resource, opts ...tjconfig.ResourceOption) *tjconfig.Resource {
 		r := tjconfig.DefaultResource(name, terraformResource)
+		words := strings.Split(name, "_")
+		group := words[0]
+		kind := tjname.NewFromSnake(strings.Join(words[1:], "_")).Camel
+		r.ShortGroup = group
+		r.Kind = kind
 		// Add any provider-specific defaulting here. For example:
 		r.ExternalName = tjconfig.IdentifierFromProvider
 		return r
