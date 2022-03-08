@@ -2,7 +2,7 @@
 
 `crossplane-provider-grafana` is a [Crossplane](https://crossplane.io/) provider that
 is built using [Terrajet](https://github.com/crossplane/terrajet) code
-generation tools and exposes XRM-conformant managed resources for the
+generation tools and exposes XRM-conformant managed resources for the 
 Grafana API.
 
 ## Getting Started
@@ -19,7 +19,6 @@ You can see the API reference [here](https://doc.crds.dev/github.com/grafana/cro
 ## Developing
 
 Run code-generation pipeline:
-
 ```console
 go run cmd/generator/main.go
 ```

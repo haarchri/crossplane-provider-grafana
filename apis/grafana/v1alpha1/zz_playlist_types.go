@@ -32,7 +32,7 @@ type ItemObservation struct {
 type ItemParameters struct {
 
 	// +kubebuilder:validation:Required
-	Order *int64 `json:"order" tf:"order,omitempty"`
+	Order *float64 `json:"order" tf:"order,omitempty"`
 
 	// +kubebuilder:validation:Required
 	Title *string `json:"title" tf:"title,omitempty"`
@@ -57,10 +57,6 @@ type PlaylistParameters struct {
 
 	// +kubebuilder:validation:Required
 	Item []ItemParameters `json:"item" tf:"item,omitempty"`
-
-	// The name of the playlist.
-	// +kubebuilder:validation:Required
-	Name *string `json:"name" tf:"name,omitempty"`
 }
 
 // PlaylistSpec defines the desired state of Playlist

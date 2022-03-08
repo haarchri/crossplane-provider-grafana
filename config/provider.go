@@ -17,10 +17,10 @@ limitations under the License.
 package config
 
 import (
-	"strings"
+	// Note(turkenh): we are importing this to embed provider schema document
+	_ "embed"
 
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
-	tjname "github.com/crossplane/terrajet/pkg/types/name"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -29,46 +29,20 @@ const (
 	modulePath     = "github.com/grafana/crossplane-provider-grafana"
 )
 
-// GetProvider returns provider configuration
-func GetProvider(resourceMap map[string]*schema.Resource) *tjconfig.Provider {
-	defaultResourceFn := func(name string, terraformResource *schema.Resource, opts ...tjconfig.ResourceOption) *tjconfig.Resource {
-		words := strings.Split(name, "_")[1:] // Remove "grafana_" prefix
-		group := "grafana"
-		switch words[0] {
-		case "synthetic":
-			group = "syntheticmonitoring"
-			words = words[2:]
-		case "machine":
-			group = "machinelearning"
-			words = words[2:]
-		case "cloud":
-			group = "cloud"
-			words = words[1:]
-		}
+//go:embed schema.json
+var providerSchema string
 
-		kind := tjname.NewFromSnake(strings.Join(words, "_")).Camel
-		r := &tjconfig.Resource{
-			Name:              name,
-			TerraformResource: terraformResource,
-			ShortGroup:        group,
-			Kind:              kind,
-			Version:           "v1alpha1",
-			ExternalName:      tjconfig.IdentifierFromProvider,
-			References:        map[string]tjconfig.Reference{},
-			Sensitive:         tjconfig.NopSensitive,
-		}
+// GetProvider returns provider configuration
+func GetProvider() *tjconfig.Provider {
+	defaultResourceFn := func(name string, terraformResource *schema.Resource, opts ...tjconfig.ResourceOption) *tjconfig.Resource {
+		r := tjconfig.DefaultResource(name, terraformResource)
+		// Add any provider-specific defaulting here. For example:
+		//   r.ExternalName = tjconfig.IdentifierFromProvider
 		return r
 	}
 
-	pc := tjconfig.NewProvider(resourceMap, resourcePrefix, modulePath,
-		tjconfig.WithDefaultResourceFn(defaultResourceFn),
-		tjconfig.WithSkipList([]string{
-			// Ignoring some resources that have trouble with generation
-			// TODO: Fix those
-			"grafana_alert_notification$",
-			"grafana_data_source$",
-		}),
-	)
+	pc := tjconfig.NewProviderWithSchema([]byte(providerSchema), resourcePrefix, modulePath,
+		tjconfig.WithDefaultResourceFn(defaultResourceFn))
 
 	for _, configure := range []func(provider *tjconfig.Provider){
 		// add custom config functions

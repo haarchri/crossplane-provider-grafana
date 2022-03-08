@@ -19,17 +19,22 @@ package main
 import (
 	"os"
 	"path/filepath"
+	"time"
 
+	"github.com/crossplane/crossplane-runtime/pkg/feature"
+	tjcontroller "github.com/crossplane/terrajet/pkg/controller"
+	"k8s.io/client-go/tools/leaderelection/resourcelock"
+
+	xpcontroller "github.com/crossplane/crossplane-runtime/pkg/controller"
 	"github.com/crossplane/crossplane-runtime/pkg/logging"
 	"github.com/crossplane/crossplane-runtime/pkg/ratelimiter"
 	"github.com/crossplane/terrajet/pkg/terraform"
-	tf "github.com/grafana/terraform-provider-grafana/grafana"
 	"gopkg.in/alecthomas/kingpin.v2"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	"github.com/grafana/crossplane-provider-grafana/apis"
-	pconfig "github.com/grafana/crossplane-provider-grafana/config"
+	"github.com/grafana/crossplane-provider-grafana/config"
 	"github.com/grafana/crossplane-provider-grafana/internal/clients"
 	"github.com/grafana/crossplane-provider-grafana/internal/controller"
 )
@@ -43,11 +48,12 @@ func main() {
 		terraformVersion = app.Flag("terraform-version", "Terraform version.").Required().Envar("TERRAFORM_VERSION").String()
 		providerSource   = app.Flag("terraform-provider-source", "Terraform provider source.").Required().Envar("TERRAFORM_PROVIDER_SOURCE").String()
 		providerVersion  = app.Flag("terraform-provider-version", "Terraform provider version.").Required().Envar("TERRAFORM_PROVIDER_VERSION").String()
+		maxReconcileRate = app.Flag("max-reconcile-rate", "The global maximum rate per second at which resources may checked for drift from the desired state.").Default("10").Int()
 	)
 	kingpin.MustParse(app.Parse(os.Args[1:]))
 
 	zl := zap.New(zap.UseDevMode(*debug))
-	log := logging.NewLogrLogger(zl.WithName("crossplane-provider-grafana"))
+	log := logging.NewLogrLogger(zl.WithName("provider-jet-grafana"))
 	if *debug {
 		// The controller-runtime runs with a no-op logger by default. It is
 		// *very* verbose even at info level, so we only provide it a real
@@ -61,17 +67,27 @@ func main() {
 	kingpin.FatalIfError(err, "Cannot get API server rest config")
 
 	mgr, err := ctrl.NewManager(cfg, ctrl.Options{
-		LeaderElection:   *leaderElection,
-		LeaderElectionID: "crossplane-leader-election-crossplane-provider-grafana",
-		SyncPeriod:       syncPeriod,
+		LeaderElection:             *leaderElection,
+		LeaderElectionID:           "crossplane-leader-election-provider-jet-grafana",
+		SyncPeriod:                 syncPeriod,
+		LeaderElectionResourceLock: resourcelock.LeasesResourceLock,
+		LeaseDuration:              func() *time.Duration { d := 60 * time.Second; return &d }(),
+		RenewDeadline:              func() *time.Duration { d := 50 * time.Second; return &d }(),
 	})
 	kingpin.FatalIfError(err, "Cannot create controller manager")
-	ws := terraform.NewWorkspaceStore(log)
-	setup := clients.TerraformSetupBuilder(*terraformVersion, *providerSource, *providerVersion)
-
-	rl := ratelimiter.NewGlobal(ratelimiter.DefaultGlobalRPS)
+	o := tjcontroller.Options{
+		Options: xpcontroller.Options{
+			Logger:                  log,
+			GlobalRateLimiter:       ratelimiter.NewGlobal(*maxReconcileRate),
+			PollInterval:            1 * time.Minute,
+			MaxConcurrentReconciles: 1,
+			Features:                &feature.Flags{},
+		},
+		Provider:       config.GetProvider(),
+		WorkspaceStore: terraform.NewWorkspaceStore(log),
+		SetupFn:        clients.TerraformSetupBuilder(*terraformVersion, *providerSource, *providerVersion),
+	}
 	kingpin.FatalIfError(apis.AddToScheme(mgr.GetScheme()), "Cannot add Grafana APIs to scheme")
-	resourceMap := tf.Provider(os.Getenv("TERRAFORM_PROVIDER_VERSION"))().ResourcesMap
-	kingpin.FatalIfError(controller.Setup(mgr, log, rl, setup, ws, pconfig.GetProvider(resourceMap), 1), "Cannot setup Grafana controllers")
+	kingpin.FatalIfError(controller.Setup(mgr, o), "Cannot setup Grafana controllers")
 	kingpin.FatalIfError(mgr.Start(ctrl.SetupSignalHandler()), "Cannot start controller manager")
 }

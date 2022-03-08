@@ -1,8 +1,9 @@
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.2
+    controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
   name: users.grafana.grafana.jet.crossplane.io
 spec:
@@ -66,13 +67,10 @@ spec:
                     description: The email address of the Grafana user.
                     type: string
                   isAdmin:
-                    description: Whether to make user an admin.
+                    description: Whether to make user an admin. Defaults to `false`.
                     type: boolean
                   login:
                     description: The username for the Grafana user.
-                    type: string
-                  name:
-                    description: The display name for the Grafana user.
                     type: string
                   passwordSecretRef:
                     description: The password for the Grafana user.
@@ -147,8 +145,7 @@ spec:
                   id:
                     type: string
                   userId:
-                    format: int64
-                    type: integer
+                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.

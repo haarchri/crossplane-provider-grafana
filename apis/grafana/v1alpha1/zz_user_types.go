@@ -28,7 +28,7 @@ import (
 type UserObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
-	UserID *int64 `json:"userId,omitempty" tf:"user_id,omitempty"`
+	UserID *float64 `json:"userId,omitempty" tf:"user_id,omitempty"`
 }
 
 type UserParameters struct {
@@ -37,17 +37,13 @@ type UserParameters struct {
 	// +kubebuilder:validation:Required
 	Email *string `json:"email" tf:"email,omitempty"`
 
-	// Whether to make user an admin.
+	// Whether to make user an admin. Defaults to `false`.
 	// +kubebuilder:validation:Optional
 	IsAdmin *bool `json:"isAdmin,omitempty" tf:"is_admin,omitempty"`
 
 	// The username for the Grafana user.
 	// +kubebuilder:validation:Optional
 	Login *string `json:"login,omitempty" tf:"login,omitempty"`
-
-	// The display name for the Grafana user.
-	// +kubebuilder:validation:Optional
-	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
 	// The password for the Grafana user.
 	// +kubebuilder:validation:Required

@@ -26,7 +26,7 @@ import (
 )
 
 type DashboardObservation struct {
-	DashboardID *int64 `json:"dashboardId,omitempty" tf:"dashboard_id,omitempty"`
+	DashboardID *float64 `json:"dashboardId,omitempty" tf:"dashboard_id,omitempty"`
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
@@ -34,7 +34,7 @@ type DashboardObservation struct {
 
 	UID *string `json:"uid,omitempty" tf:"uid,omitempty"`
 
-	Version *int64 `json:"version,omitempty" tf:"version,omitempty"`
+	Version *float64 `json:"version,omitempty" tf:"version,omitempty"`
 }
 
 type DashboardParameters struct {
@@ -45,7 +45,7 @@ type DashboardParameters struct {
 
 	// The id of the folder to save the dashboard in.
 	// +kubebuilder:validation:Optional
-	Folder *int64 `json:"folder,omitempty" tf:"folder,omitempty"`
+	Folder *float64 `json:"folder,omitempty" tf:"folder,omitempty"`
 
 	// Set a commit message for the version history.
 	// +kubebuilder:validation:Optional
