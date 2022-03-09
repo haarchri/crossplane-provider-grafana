@@ -1139,6 +1139,16 @@ func (in *DashboardParameters) DeepCopyInto(out *DashboardParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.FolderRef != nil {
+		in, out := &in.FolderRef, &out.FolderRef
+		*out = new(v1.Reference)
+		**out = **in
+	}
+	if in.FolderSelector != nil {
+		in, out := &in.FolderSelector, &out.FolderSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Message != nil {
 		in, out := &in.Message, &out.Message
 		*out = new(string)
