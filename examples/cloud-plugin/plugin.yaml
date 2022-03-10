@@ -1,0 +1,13 @@
+
+apiVersion: grafana.grafana.jet.crossplane.io/v1alpha1
+kind: CloudPluginInstallation
+metadata:
+  name: my-stack-json-datasource
+spec:
+  forProvider:
+    slug: 'grafana-simple-json-datasource'
+    version: '1.4.2'
+    stackRef:
+      name: my-stack
+  providerConfigRef:
+    name: grafana-cloud-provider
