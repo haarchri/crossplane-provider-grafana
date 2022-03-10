@@ -91,22 +91,44 @@ type DataSourceParameters struct {
 	Username *string `json:"username,omitempty" tf:"username,omitempty"`
 }
 
+type DerivedFieldObservation struct {
+}
+
+type DerivedFieldParameters struct {
+
+	// +kubebuilder:validation:Optional
+	DatasourceUID *string `json:"datasourceUid,omitempty" tf:"datasource_uid,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	MatcherRegex *string `json:"matcherRegex,omitempty" tf:"matcher_regex,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// +kubebuilder:validation:Optional
+	URL *string `json:"url,omitempty" tf:"url,omitempty"`
+}
+
 type JSONDataObservation struct {
 }
 
 type JSONDataParameters struct {
 
-	// (CloudWatch) The ARN of the role to be assumed by Grafana when using the CloudWatch data source.
+	// (CloudWatch, Athena) The ARN of the role to be assumed by Grafana when using the CloudWatch or Athena data source.
 	// +kubebuilder:validation:Optional
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty" tf:"assume_role_arn,omitempty"`
 
-	// (CloudWatch) The authentication type used to access the data source.
+	// (CloudWatch, Athena) The authentication type used to access the data source.
 	// +kubebuilder:validation:Optional
 	AuthType *string `json:"authType,omitempty" tf:"auth_type,omitempty"`
 
 	// (Stackdriver) The authentication type: `jwt` or `gce`.
 	// +kubebuilder:validation:Optional
 	AuthenticationType *string `json:"authenticationType,omitempty" tf:"authentication_type,omitempty"`
+
+	// (Athena) Athena catalog.
+	// +kubebuilder:validation:Optional
+	Catalog *string `json:"catalog,omitempty" tf:"catalog,omitempty"`
 
 	// (Stackdriver) Service account email address.
 	// +kubebuilder:validation:Optional
@@ -120,13 +142,25 @@ type JSONDataParameters struct {
 	// +kubebuilder:validation:Optional
 	CustomMetricsNamespaces *string `json:"customMetricsNamespaces,omitempty" tf:"custom_metrics_namespaces,omitempty"`
 
+	// (Athena) Name of the database within the catalog.
+	// +kubebuilder:validation:Optional
+	Database *string `json:"database,omitempty" tf:"database,omitempty"`
+
+	// (InfluxDB) The default bucket for the data source.
+	// +kubebuilder:validation:Optional
+	DefaultBucket *string `json:"defaultBucket,omitempty" tf:"default_bucket,omitempty"`
+
 	// (Stackdriver) The default project for the data source.
 	// +kubebuilder:validation:Optional
 	DefaultProject *string `json:"defaultProject,omitempty" tf:"default_project,omitempty"`
 
-	// (CloudWatch) The default region for the data source.
+	// (CloudWatch, Athena) The default region for the data source.
 	// +kubebuilder:validation:Optional
 	DefaultRegion *string `json:"defaultRegion,omitempty" tf:"default_region,omitempty"`
+
+	// (Loki) See https://grafana.com/docs/grafana/latest/datasources/loki/#derived-fields
+	// +kubebuilder:validation:Optional
+	DerivedField []DerivedFieldParameters `json:"derivedField,omitempty" tf:"derived_field,omitempty"`
 
 	// (MSSQL) Connection SSL encryption handling: 'disable', 'false' or 'true'.
 	// +kubebuilder:validation:Optional
@@ -135,6 +169,14 @@ type JSONDataParameters struct {
 	// (Elasticsearch) Elasticsearch semantic version (Grafana v8.0+).
 	// +kubebuilder:validation:Optional
 	EsVersion *string `json:"esVersion,omitempty" tf:"es_version,omitempty"`
+
+	// (CloudWatch, Athena) If you are assuming a role in another account, that has been created with an external ID, specify the external ID here.
+	// +kubebuilder:validation:Optional
+	ExternalID *string `json:"externalId,omitempty" tf:"external_id,omitempty"`
+
+	// (Github) Github URL
+	// +kubebuilder:validation:Optional
+	GithubURL *string `json:"githubUrl,omitempty" tf:"github_url,omitempty"`
 
 	// (Graphite) Graphite version.
 	// +kubebuilder:validation:Optional
@@ -164,15 +206,31 @@ type JSONDataParameters struct {
 	// +kubebuilder:validation:Optional
 	MaxIdleConns *float64 `json:"maxIdleConns,omitempty" tf:"max_idle_conns,omitempty"`
 
+	// (Loki) Upper limit for the number of log lines returned by Loki
+	// +kubebuilder:validation:Optional
+	MaxLines *float64 `json:"maxLines,omitempty" tf:"max_lines,omitempty"`
+
 	// (MySQL, PostgreSQL and MSSQL) Maximum number of open connections to the database (Grafana v5.4+).
 	// +kubebuilder:validation:Optional
 	MaxOpenConns *float64 `json:"maxOpenConns,omitempty" tf:"max_open_conns,omitempty"`
+
+	// (Sentry) Organization slug.
+	// +kubebuilder:validation:Optional
+	OrgSlug *string `json:"orgSlug,omitempty" tf:"org_slug,omitempty"`
+
+	// (InfluxDB) An organization is a workspace for a group of users. All dashboards, tasks, buckets, members, etc., belong to an organization.
+	// +kubebuilder:validation:Optional
+	Organization *string `json:"organization,omitempty" tf:"organization,omitempty"`
+
+	// (Athena) AWS S3 bucket to store execution outputs. If not specified, the default query result location from the Workgroup configuration will be used.
+	// +kubebuilder:validation:Optional
+	OutputLocation *string `json:"outputLocation,omitempty" tf:"output_location,omitempty"`
 
 	// (PostgreSQL) Postgres version as a number (903/904/905/906/1000) meaning v9.3, v9.4, etc.
 	// +kubebuilder:validation:Optional
 	PostgresVersion *float64 `json:"postgresVersion,omitempty" tf:"postgres_version,omitempty"`
 
-	// (CloudWatch) The credentials profile name to use when authentication type is set as 'Credentials file'.
+	// (CloudWatch, Athena) The credentials profile name to use when authentication type is set as 'Credentials file'.
 	// +kubebuilder:validation:Optional
 	Profile *string `json:"profile,omitempty" tf:"profile,omitempty"`
 
@@ -216,6 +274,10 @@ type JSONDataParameters struct {
 	// +kubebuilder:validation:Optional
 	TLSAuthWithCACert *bool `json:"tlsAuthWithCaCert,omitempty" tf:"tls_auth_with_ca_cert,omitempty"`
 
+	// (All) SSL Certificate configuration, either by ‘file-path’ or ‘file-content’.
+	// +kubebuilder:validation:Optional
+	TLSConfigurationMethod *string `json:"tlsConfigurationMethod,omitempty" tf:"tls_configuration_method,omitempty"`
+
 	// (All) Controls whether a client verifies the server’s certificate chain and host name.
 	// +kubebuilder:validation:Optional
 	TLSSkipVerify *bool `json:"tlsSkipVerify,omitempty" tf:"tls_skip_verify,omitempty"`
@@ -238,11 +300,19 @@ type JSONDataParameters struct {
 
 	// (OpenTSDB) Resolution.
 	// +kubebuilder:validation:Optional
-	TsdbResolution *string `json:"tsdbResolution,omitempty" tf:"tsdb_resolution,omitempty"`
+	TsdbResolution *float64 `json:"tsdbResolution,omitempty" tf:"tsdb_resolution,omitempty"`
 
 	// (OpenTSDB) Version.
 	// +kubebuilder:validation:Optional
-	TsdbVersion *string `json:"tsdbVersion,omitempty" tf:"tsdb_version,omitempty"`
+	TsdbVersion *float64 `json:"tsdbVersion,omitempty" tf:"tsdb_version,omitempty"`
+
+	// (InfluxDB) InfluxQL or Flux.
+	// +kubebuilder:validation:Optional
+	Version *string `json:"version,omitempty" tf:"version,omitempty"`
+
+	// (Athena) Workgroup to use.
+	// +kubebuilder:validation:Optional
+	Workgroup *string `json:"workgroup,omitempty" tf:"workgroup,omitempty"`
 }
 
 type SecureJSONDataObservation struct {
@@ -250,9 +320,17 @@ type SecureJSONDataObservation struct {
 
 type SecureJSONDataParameters struct {
 
-	// (CloudWatch) The access key to use to access the data source.
+	// (CloudWatch, Athena) The access key to use to access the data source.
 	// +kubebuilder:validation:Optional
 	AccessKeySecretRef *v1.SecretKeySelector `json:"accessKeySecretRef,omitempty" tf:"-"`
+
+	// (Github) The access token to use to access the data source
+	// +kubebuilder:validation:Optional
+	AccessTokenSecretRef *v1.SecretKeySelector `json:"accessTokenSecretRef,omitempty" tf:"-"`
+
+	// (Sentry) Authorization token.
+	// +kubebuilder:validation:Optional
+	AuthTokenSecretRef *v1.SecretKeySelector `json:"authTokenSecretRef,omitempty" tf:"-"`
 
 	// (All) Password to use for basic authentication.
 	// +kubebuilder:validation:Optional
@@ -266,7 +344,7 @@ type SecureJSONDataParameters struct {
 	// +kubebuilder:validation:Optional
 	PrivateKeySecretRef *v1.SecretKeySelector `json:"privateKeySecretRef,omitempty" tf:"-"`
 
-	// (CloudWatch) The secret key to use to access the data source.
+	// (CloudWatch, Athena) The secret key to use to access the data source.
 	// +kubebuilder:validation:Optional
 	SecretKeySecretRef *v1.SecretKeySelector `json:"secretKeySecretRef,omitempty" tf:"-"`
 

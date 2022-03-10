@@ -5,7 +5,7 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: apikeys.grafana.grafana.jet.crossplane.io
+  name: reports.grafana.grafana.jet.crossplane.io
 spec:
   group: grafana.grafana.jet.crossplane.io
   names:
@@ -13,10 +13,10 @@ spec:
     - crossplane
     - managed
     - grafanajet
-    kind: APIKey
-    listKind: APIKeyList
-    plural: apikeys
-    singular: apikey
+    kind: Report
+    listKind: ReportList
+    plural: reports
+    singular: report
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: APIKey is the Schema for the APIKeys API
+        description: Report is the Schema for the Reports API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: APIKeySpec defines the desired state of APIKey
+            description: ReportSpec defines the desired state of Report
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,21 +63,86 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  cloudStackSlug:
-                    description: 'If set, the API key will be created for the given
-                      Cloud stack. This can be used to bootstrap a management API
-                      key for a new stack. **Note**: This requires a cloud token to
-                      be configured.'
+                  dashboardId:
+                    description: Dashboard to be sent in the report.
+                    type: number
+                  includeDashboardLink:
+                    description: Whether to include a link to the dashboard in the
+                      report. Defaults to `true`.
+                    type: boolean
+                  includeTableCsv:
+                    description: Whether to include a CSV file of table panel data.
+                      Defaults to `false`.
+                    type: boolean
+                  layout:
+                    description: Layout of the report. `simple` or `grid` Defaults
+                      to `grid`.
+                    type: string
+                  message:
+                    description: Message to be sent in the report.
                     type: string
                   name:
+                    description: Name of the report.
                     type: string
-                  role:
+                  orientation:
+                    description: Orientation of the report. `landscape` or `portrait`
+                      Defaults to `landscape`.
                     type: string
-                  secondsToLive:
-                    type: number
+                  recipients:
+                    description: List of recipients of the report.
+                    items:
+                      type: string
+                    type: array
+                  replyTo:
+                    description: Reply-to email address of the report.
+                    type: string
+                  schedule:
+                    description: Schedule of the report.
+                    items:
+                      properties:
+                        customInterval:
+                          description: Custom interval of the report. **Note:** This
+                            field is only available when frequency is set to `custom`.
+                          type: string
+                        endTime:
+                          description: End time of the report. If empty, the report
+                            will be sent indefinitely (according to frequency). Note
+                            that times will be saved as UTC in Grafana.
+                          type: string
+                        frequency:
+                          description: Frequency of the report. One of `never`, `once`,
+                            `hourly`, `daily`, `weekly`, `monthly` or `custom`.
+                          type: string
+                        startTime:
+                          description: Start time of the report. If empty, the start
+                            date will be set to the creation time. Note that times
+                            will be saved as UTC in Grafana.
+                          type: string
+                        workdaysOnly:
+                          description: Whether to send the report only on work days.
+                            Defaults to `false`.
+                          type: boolean
+                      required:
+                      - frequency
+                      type: object
+                    type: array
+                  timeRange:
+                    description: Time range of the report.
+                    items:
+                      properties:
+                        from:
+                          description: Start of the time range.
+                          type: string
+                        to:
+                          description: End of the time range.
+                          type: string
+                      type: object
+                    type: array
                 required:
+                - dashboardId
                 - name
-                - role
+                - recipients
+                - schedule
                 type: object
               providerConfigRef:
                 default:
@@ -124,12 +189,10 @@ spec:
             - forProvider
             type: object
           status:
-            description: APIKeyStatus defines the observed state of APIKey.
+            description: ReportStatus defines the observed state of Report.
             properties:
               atProvider:
                 properties:
-                  expiration:
-                    type: string
                   id:
                     type: string
                 type: object

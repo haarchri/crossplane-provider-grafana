@@ -43,9 +43,9 @@ type DashboardParameters struct {
 	// +kubebuilder:validation:Required
 	ConfigJSON *string `json:"configJson" tf:"config_json,omitempty"`
 
-	// The id of the folder to save the dashboard in.
+	// The id of the folder to save the dashboard in. This attribute is a string to reflect the type of the folder's id.
 	// +kubebuilder:validation:Optional
-	Folder *float64 `json:"folder,omitempty" tf:"folder,omitempty"`
+	Folder *string `json:"folder,omitempty" tf:"folder,omitempty"`
 
 	// Set a commit message for the version history.
 	// +kubebuilder:validation:Optional

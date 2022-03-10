@@ -24,17 +24,22 @@ import (
 	alertnotification "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/alertnotification"
 	apikey "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/apikey"
 	builtinroleassignment "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/builtinroleassignment"
+	cloudapikey "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/cloudapikey"
+	cloudstack "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/cloudstack"
 	dashboard "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/dashboard"
 	dashboardpermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/dashboardpermission"
 	datasource "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/datasource"
 	datasourcepermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/datasourcepermission"
 	folder "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/folder"
 	folderpermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/folderpermission"
+	librarypanel "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/librarypanel"
 	machinelearningjob "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/machinelearningjob"
 	organization "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/organization"
 	playlist "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/playlist"
+	report "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/report"
 	role "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/role"
 	syntheticmonitoringcheck "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringcheck"
+	syntheticmonitoringinstallation "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringinstallation"
 	syntheticmonitoringprobe "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringprobe"
 	team "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/team"
 	teamexternalgroup "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/teamexternalgroup"
@@ -50,17 +55,22 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		alertnotification.Setup,
 		apikey.Setup,
 		builtinroleassignment.Setup,
+		cloudapikey.Setup,
+		cloudstack.Setup,
 		dashboard.Setup,
 		dashboardpermission.Setup,
 		datasource.Setup,
 		datasourcepermission.Setup,
 		folder.Setup,
 		folderpermission.Setup,
+		librarypanel.Setup,
 		machinelearningjob.Setup,
 		organization.Setup,
 		playlist.Setup,
+		report.Setup,
 		role.Setup,
 		syntheticmonitoringcheck.Setup,
+		syntheticmonitoringinstallation.Setup,
 		syntheticmonitoringprobe.Setup,
 		team.Setup,
 		teamexternalgroup.Setup,

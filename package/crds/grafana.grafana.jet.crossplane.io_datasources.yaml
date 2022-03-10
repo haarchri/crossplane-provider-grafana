@@ -126,16 +126,20 @@ spec:
                     items:
                       properties:
                         assumeRoleArn:
-                          description: (CloudWatch) The ARN of the role to be assumed
-                            by Grafana when using the CloudWatch data source.
+                          description: (CloudWatch, Athena) The ARN of the role to
+                            be assumed by Grafana when using the CloudWatch or Athena
+                            data source.
                           type: string
                         authType:
-                          description: (CloudWatch) The authentication type used to
-                            access the data source.
+                          description: (CloudWatch, Athena) The authentication type
+                            used to access the data source.
                           type: string
                         authenticationType:
                           description: '(Stackdriver) The authentication type: `jwt`
                             or `gce`.'
+                          type: string
+                        catalog:
+                          description: (Athena) Athena catalog.
                           type: string
                         clientEmail:
                           description: (Stackdriver) Service account email address.
@@ -149,14 +153,35 @@ spec:
                           description: (CloudWatch) A comma-separated list of custom
                             namespaces to be queried by the CloudWatch data source.
                           type: string
+                        database:
+                          description: (Athena) Name of the database within the catalog.
+                          type: string
+                        defaultBucket:
+                          description: (InfluxDB) The default bucket for the data
+                            source.
+                          type: string
                         defaultProject:
                           description: (Stackdriver) The default project for the data
                             source.
                           type: string
                         defaultRegion:
-                          description: (CloudWatch) The default region for the data
-                            source.
+                          description: (CloudWatch, Athena) The default region for
+                            the data source.
                           type: string
+                        derivedField:
+                          description: (Loki) See https://grafana.com/docs/grafana/latest/datasources/loki/#derived-fields
+                          items:
+                            properties:
+                              datasourceUid:
+                                type: string
+                              matcherRegex:
+                                type: string
+                              name:
+                                type: string
+                              url:
+                                type: string
+                            type: object
+                          type: array
                         encrypt:
                           description: '(MSSQL) Connection SSL encryption handling:
                             ''disable'', ''false'' or ''true''.'
@@ -164,6 +189,14 @@ spec:
                         esVersion:
                           description: (Elasticsearch) Elasticsearch semantic version
                             (Grafana v8.0+).
+                          type: string
+                        externalId:
+                          description: (CloudWatch, Athena) If you are assuming a
+                            role in another account, that has been created with an
+                            external ID, specify the external ID here.
+                          type: string
+                        githubUrl:
+                          description: (Github) Github URL
                           type: string
                         graphiteVersion:
                           description: (Graphite) Graphite version.
@@ -192,17 +225,35 @@ spec:
                           description: (MySQL, PostgreSQL and MSSQL) Maximum number
                             of connections in the idle connection pool (Grafana v5.4+).
                           type: number
+                        maxLines:
+                          description: (Loki) Upper limit for the number of log lines
+                            returned by Loki
+                          type: number
                         maxOpenConns:
                           description: (MySQL, PostgreSQL and MSSQL) Maximum number
                             of open connections to the database (Grafana v5.4+).
                           type: number
+                        orgSlug:
+                          description: (Sentry) Organization slug.
+                          type: string
+                        organization:
+                          description: (InfluxDB) An organization is a workspace for
+                            a group of users. All dashboards, tasks, buckets, members,
+                            etc., belong to an organization.
+                          type: string
+                        outputLocation:
+                          description: (Athena) AWS S3 bucket to store execution outputs.
+                            If not specified, the default query result location from
+                            the Workgroup configuration will be used.
+                          type: string
                         postgresVersion:
                           description: (PostgreSQL) Postgres version as a number (903/904/905/906/1000)
                             meaning v9.3, v9.4, etc.
                           type: number
                         profile:
-                          description: (CloudWatch) The credentials profile name to
-                            use when authentication type is set as 'Credentials file'.
+                          description: (CloudWatch, Athena) The credentials profile
+                            name to use when authentication type is set as 'Credentials
+                            file'.
                           type: string
                         queryTimeout:
                           description: (Prometheus) Timeout for queries made to the
@@ -256,6 +307,10 @@ spec:
                         tlsAuthWithCaCert:
                           description: (All) Enable TLS authentication using CA cert.
                           type: boolean
+                        tlsConfigurationMethod:
+                          description: (All) SSL Certificate configuration, either
+                            by ‘file-path’ or ‘file-content’.
+                          type: string
                         tlsSkipVerify:
                           description: (All) Controls whether a client verifies the
                             server’s certificate chain and host name.
@@ -266,9 +321,15 @@ spec:
                           type: string
                         tsdbResolution:
                           description: (OpenTSDB) Resolution.
-                          type: string
+                          type: number
                         tsdbVersion:
                           description: (OpenTSDB) Version.
+                          type: number
+                        version:
+                          description: (InfluxDB) InfluxQL or Flux.
+                          type: string
+                        workgroup:
+                          description: (Athena) Workgroup to use.
                           type: string
                       type: object
                     type: array
@@ -297,8 +358,43 @@ spec:
                     items:
                       properties:
                         accessKeySecretRef:
-                          description: (CloudWatch) The access key to use to access
-                            the data source.
+                          description: (CloudWatch, Athena) The access key to use
+                            to access the data source.
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
+                        accessTokenSecretRef:
+                          description: (Github) The access token to use to access
+                            the data source
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
+                        authTokenSecretRef:
+                          description: (Sentry) Authorization token.
                           properties:
                             key:
                               description: The key to select.
@@ -367,8 +463,8 @@ spec:
                           - namespace
                           type: object
                         secretKeySecretRef:
-                          description: (CloudWatch) The secret key to use to access
-                            the data source.
+                          description: (CloudWatch, Athena) The secret key to use
+                            to access the data source.
                           properties:
                             key:
                               description: The key to select.

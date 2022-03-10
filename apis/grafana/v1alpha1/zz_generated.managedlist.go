@@ -46,6 +46,24 @@ func (l *BuiltinRoleAssignmentList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this CloudAPIKeyList.
+func (l *CloudAPIKeyList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this CloudStackList.
+func (l *CloudStackList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this DashboardList.
 func (l *DashboardList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -100,6 +118,15 @@ func (l *FolderPermissionList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this LibraryPanelList.
+func (l *LibraryPanelList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this MachineLearningJobList.
 func (l *MachineLearningJobList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -127,6 +154,15 @@ func (l *PlaylistList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this ReportList.
+func (l *ReportList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this RoleList.
 func (l *RoleList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
@@ -138,6 +174,15 @@ func (l *RoleList) GetItems() []resource.Managed {
 
 // GetItems of this SyntheticMonitoringCheckList.
 func (l *SyntheticMonitoringCheckList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
+// GetItems of this SyntheticMonitoringInstallationList.
+func (l *SyntheticMonitoringInstallationList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))
 	for i := range l.Items {
 		items[i] = &l.Items[i]

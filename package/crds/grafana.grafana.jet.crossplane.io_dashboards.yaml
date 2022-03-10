@@ -67,8 +67,9 @@ spec:
                     description: The complete dashboard model JSON.
                     type: string
                   folder:
-                    description: The id of the folder to save the dashboard in.
-                    type: number
+                    description: The id of the folder to save the dashboard in. This
+                      attribute is a string to reflect the type of the folder's id.
+                    type: string
                   message:
                     description: Set a commit message for the version history.
                     type: string

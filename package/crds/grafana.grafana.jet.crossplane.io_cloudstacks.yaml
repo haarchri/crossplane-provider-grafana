@@ -5,7 +5,7 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: apikeys.grafana.grafana.jet.crossplane.io
+  name: cloudstacks.grafana.grafana.jet.crossplane.io
 spec:
   group: grafana.grafana.jet.crossplane.io
   names:
@@ -13,10 +13,10 @@ spec:
     - crossplane
     - managed
     - grafanajet
-    kind: APIKey
-    listKind: APIKeyList
-    plural: apikeys
-    singular: apikey
+    kind: CloudStack
+    listKind: CloudStackList
+    plural: cloudstacks
+    singular: cloudstack
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: APIKey is the Schema for the APIKeys API
+        description: CloudStack is the Schema for the CloudStacks API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: APIKeySpec defines the desired state of APIKey
+            description: CloudStackSpec defines the desired state of CloudStack
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,21 +63,35 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  cloudStackSlug:
-                    description: 'If set, the API key will be created for the given
-                      Cloud stack. This can be used to bootstrap a management API
-                      key for a new stack. **Note**: This requires a cloud token to
-                      be configured.'
+                  description:
+                    description: Description of stack.
                     type: string
                   name:
+                    description: Name of stack. Conventionally matches the url of
+                      the instance (e.g. “<stack_slug>.grafana.net”).
                     type: string
-                  role:
+                  regionSlug:
+                    description: Region slug to assign to this stack. Changing region
+                      will destroy the existing stack and create a new one in the
+                      desired region
                     type: string
-                  secondsToLive:
-                    type: number
+                  slug:
+                    description: Subdomain that the Grafana instance will be available
+                      at (i.e. setting slug to “<stack_slug>” will make the instance
+                      available at “https://<stack_slug>.grafana.net".
+                    type: string
+                  url:
+                    description: Custom URL for the Grafana instance. Must have a
+                      CNAME setup to point to `.grafana.net` before creating the stack
+                    type: string
+                  waitForReadiness:
+                    description: Whether to wait for readiness of the stack after
+                      creating it. The check is a HEAD request to the stack URL (Grafana
+                      instance). Defaults to `true`.
+                    type: boolean
                 required:
                 - name
-                - role
+                - slug
                 type: object
               providerConfigRef:
                 default:
@@ -124,13 +138,47 @@ spec:
             - forProvider
             type: object
           status:
-            description: APIKeyStatus defines the observed state of APIKey.
+            description: CloudStackStatus defines the observed state of CloudStack.
             properties:
               atProvider:
                 properties:
-                  expiration:
+                  alertmanagerName:
                     type: string
+                  alertmanagerStatus:
+                    type: string
+                  alertmanagerUrl:
+                    type: string
+                  alertmanagerUserId:
+                    type: number
                   id:
+                    type: string
+                  logsName:
+                    type: string
+                  logsStatus:
+                    type: string
+                  logsUrl:
+                    type: string
+                  logsUserId:
+                    type: number
+                  orgId:
+                    type: number
+                  orgName:
+                    type: string
+                  orgSlug:
+                    type: string
+                  prometheusName:
+                    type: string
+                  prometheusRemoteEndpoint:
+                    type: string
+                  prometheusRemoteWriteEndpoint:
+                    type: string
+                  prometheusStatus:
+                    type: string
+                  prometheusUrl:
+                    type: string
+                  prometheusUserId:
+                    type: number
+                  status:
                     type: string
                 type: object
               conditions:
