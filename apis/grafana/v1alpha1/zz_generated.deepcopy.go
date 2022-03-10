@@ -118,6 +118,16 @@ func (in *APIKeyParameters) DeepCopyInto(out *APIKeyParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.CloudStackSlugRef != nil {
+		in, out := &in.CloudStackSlugRef, &out.CloudStackSlugRef
+		*out = new(v1.Reference)
+		**out = **in
+	}
+	if in.CloudStackSlugSelector != nil {
+		in, out := &in.CloudStackSlugSelector, &out.CloudStackSlugSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Name != nil {
 		in, out := &in.Name, &out.Name
 		*out = new(string)

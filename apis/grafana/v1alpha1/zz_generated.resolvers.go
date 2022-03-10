@@ -20,10 +20,37 @@ package v1alpha1
 import (
 	"context"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
+	apikey "github.com/grafana/crossplane-provider-grafana/config/apikey"
 	dashboard "github.com/grafana/crossplane-provider-grafana/config/dashboard"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
+
+// ResolveReferences of this APIKey.
+func (mg *APIKey) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.CloudStackSlug),
+		Extract:      apikey.SlugExtractor(),
+		Reference:    mg.Spec.ForProvider.CloudStackSlugRef,
+		Selector:     mg.Spec.ForProvider.CloudStackSlugSelector,
+		To: reference.To{
+			List:    &CloudStackList{},
+			Managed: &CloudStack{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.CloudStackSlug")
+	}
+	mg.Spec.ForProvider.CloudStackSlug = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.CloudStackSlugRef = rsp.ResolvedReference
+
+	return nil
+}
 
 // ResolveReferences of this Dashboard.
 func (mg *Dashboard) ResolveReferences(ctx context.Context, c client.Reader) error {
