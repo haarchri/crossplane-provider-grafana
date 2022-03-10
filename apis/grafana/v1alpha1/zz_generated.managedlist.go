@@ -55,6 +55,15 @@ func (l *CloudAPIKeyList) GetItems() []resource.Managed {
 	return items
 }
 
+// GetItems of this CloudPluginInstallationList.
+func (l *CloudPluginInstallationList) GetItems() []resource.Managed {
+	items := make([]resource.Managed, len(l.Items))
+	for i := range l.Items {
+		items[i] = &l.Items[i]
+	}
+	return items
+}
+
 // GetItems of this CloudStackList.
 func (l *CloudStackList) GetItems() []resource.Managed {
 	items := make([]resource.Managed, len(l.Items))

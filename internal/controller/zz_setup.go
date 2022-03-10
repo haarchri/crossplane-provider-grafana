@@ -25,6 +25,7 @@ import (
 	apikey "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/apikey"
 	builtinroleassignment "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/builtinroleassignment"
 	cloudapikey "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/cloudapikey"
+	cloudplugininstallation "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/cloudplugininstallation"
 	cloudstack "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/cloudstack"
 	dashboard "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/dashboard"
 	dashboardpermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/dashboardpermission"
@@ -56,6 +57,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		apikey.Setup,
 		builtinroleassignment.Setup,
 		cloudapikey.Setup,
+		cloudplugininstallation.Setup,
 		cloudstack.Setup,
 		dashboard.Setup,
 		dashboardpermission.Setup,

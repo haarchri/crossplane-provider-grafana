@@ -20,8 +20,7 @@ package v1alpha1
 import (
 	"context"
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
-	apikey "github.com/grafana/crossplane-provider-grafana/config/apikey"
-	dashboard "github.com/grafana/crossplane-provider-grafana/config/dashboard"
+	config "github.com/grafana/crossplane-provider-grafana/config"
 	errors "github.com/pkg/errors"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -35,7 +34,7 @@ func (mg *APIKey) ResolveReferences(ctx context.Context, c client.Reader) error 
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.CloudStackSlug),
-		Extract:      apikey.SlugExtractor(),
+		Extract:      config.SlugExtractor(),
 		Reference:    mg.Spec.ForProvider.CloudStackRef,
 		Selector:     mg.Spec.ForProvider.CloudStackSelector,
 		To: reference.To{
@@ -52,6 +51,32 @@ func (mg *APIKey) ResolveReferences(ctx context.Context, c client.Reader) error 
 	return nil
 }
 
+// ResolveReferences of this CloudPluginInstallation.
+func (mg *CloudPluginInstallation) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.StackSlug),
+		Extract:      config.SlugExtractor(),
+		Reference:    mg.Spec.ForProvider.StackRef,
+		Selector:     mg.Spec.ForProvider.StackSelector,
+		To: reference.To{
+			List:    &CloudStackList{},
+			Managed: &CloudStack{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.StackSlug")
+	}
+	mg.Spec.ForProvider.StackSlug = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.StackRef = rsp.ResolvedReference
+
+	return nil
+}
+
 // ResolveReferences of this Dashboard.
 func (mg *Dashboard) ResolveReferences(ctx context.Context, c client.Reader) error {
 	r := reference.NewAPIResolver(c, mg)
@@ -61,7 +86,7 @@ func (mg *Dashboard) ResolveReferences(ctx context.Context, c client.Reader) err
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.Folder),
-		Extract:      dashboard.IDExtractor(),
+		Extract:      config.IDExtractor(),
 		Reference:    mg.Spec.ForProvider.FolderRef,
 		Selector:     mg.Spec.ForProvider.FolderSelector,
 		To: reference.To{

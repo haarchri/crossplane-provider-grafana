@@ -45,7 +45,7 @@ type DashboardParameters struct {
 
 	// The id of the folder to save the dashboard in. This attribute is a string to reflect the type of the folder's id.
 	// +crossplane:generate:reference:type=Folder
-	// +crossplane:generate:reference:extractor=github.com/grafana/crossplane-provider-grafana/config/dashboard.IDExtractor()
+	// +crossplane:generate:reference:extractor=github.com/grafana/crossplane-provider-grafana/config.IDExtractor()
 	// +kubebuilder:validation:Optional
 	Folder *string `json:"folder,omitempty" tf:"folder,omitempty"`
 

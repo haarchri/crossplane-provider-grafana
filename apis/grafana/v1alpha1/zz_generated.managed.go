@@ -243,6 +243,62 @@ func (mg *CloudAPIKey) SetWriteConnectionSecretToReference(r *xpv1.SecretReferen
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this CloudPluginInstallation.
+func (mg *CloudPluginInstallation) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this CloudPluginInstallation.
+func (mg *CloudPluginInstallation) GetDeletionPolicy() xpv1.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetProviderConfigReference of this CloudPluginInstallation.
+func (mg *CloudPluginInstallation) GetProviderConfigReference() *xpv1.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+/*
+GetProviderReference of this CloudPluginInstallation.
+Deprecated: Use GetProviderConfigReference.
+*/
+func (mg *CloudPluginInstallation) GetProviderReference() *xpv1.Reference {
+	return mg.Spec.ProviderReference
+}
+
+// GetWriteConnectionSecretToReference of this CloudPluginInstallation.
+func (mg *CloudPluginInstallation) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this CloudPluginInstallation.
+func (mg *CloudPluginInstallation) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this CloudPluginInstallation.
+func (mg *CloudPluginInstallation) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetProviderConfigReference of this CloudPluginInstallation.
+func (mg *CloudPluginInstallation) SetProviderConfigReference(r *xpv1.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+/*
+SetProviderReference of this CloudPluginInstallation.
+Deprecated: Use SetProviderConfigReference.
+*/
+func (mg *CloudPluginInstallation) SetProviderReference(r *xpv1.Reference) {
+	mg.Spec.ProviderReference = r
+}
+
+// SetWriteConnectionSecretToReference of this CloudPluginInstallation.
+func (mg *CloudPluginInstallation) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this CloudStack.
 func (mg *CloudStack) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)

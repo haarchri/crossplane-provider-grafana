@@ -25,83 +25,80 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type APIKeyObservation struct {
-	Expiration *string `json:"expiration,omitempty" tf:"expiration,omitempty"`
-
+type CloudPluginInstallationObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 }
 
-type APIKeyParameters struct {
+type CloudPluginInstallationParameters struct {
+
+	// Slug of the plugin to be installed.
+	// +kubebuilder:validation:Required
+	Slug *string `json:"slug" tf:"slug,omitempty"`
 
 	// +kubebuilder:validation:Optional
-	CloudStackRef *v1.Reference `json:"cloudStackRef,omitempty" tf:"-"`
+	StackRef *v1.Reference `json:"stackRef,omitempty" tf:"-"`
 
 	// +kubebuilder:validation:Optional
-	CloudStackSelector *v1.Selector `json:"cloudStackSelector,omitempty" tf:"-"`
+	StackSelector *v1.Selector `json:"stackSelector,omitempty" tf:"-"`
 
-	// If set, the API key will be created for the given Cloud stack. This can be used to bootstrap a management API key for a new stack. **Note**: This requires a cloud token to be configured.
+	// The stack id to which the plugin should be installed.
 	// +crossplane:generate:reference:type=CloudStack
 	// +crossplane:generate:reference:extractor=github.com/grafana/crossplane-provider-grafana/config.SlugExtractor()
-	// +crossplane:generate:reference:refFieldName=CloudStackRef
-	// +crossplane:generate:reference:selectorFieldName=CloudStackSelector
+	// +crossplane:generate:reference:refFieldName=StackRef
+	// +crossplane:generate:reference:selectorFieldName=StackSelector
 	// +kubebuilder:validation:Optional
-	CloudStackSlug *string `json:"cloudStackSlug,omitempty" tf:"cloud_stack_slug,omitempty"`
+	StackSlug *string `json:"stackSlug,omitempty" tf:"stack_slug,omitempty"`
 
+	// Version of the plugin to be installed.
 	// +kubebuilder:validation:Required
-	Name *string `json:"name" tf:"name,omitempty"`
-
-	// +kubebuilder:validation:Required
-	Role *string `json:"role" tf:"role,omitempty"`
-
-	// +kubebuilder:validation:Optional
-	SecondsToLive *float64 `json:"secondsToLive,omitempty" tf:"seconds_to_live,omitempty"`
+	Version *string `json:"version" tf:"version,omitempty"`
 }
 
-// APIKeySpec defines the desired state of APIKey
-type APIKeySpec struct {
+// CloudPluginInstallationSpec defines the desired state of CloudPluginInstallation
+type CloudPluginInstallationSpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     APIKeyParameters `json:"forProvider"`
+	ForProvider     CloudPluginInstallationParameters `json:"forProvider"`
 }
 
-// APIKeyStatus defines the observed state of APIKey.
-type APIKeyStatus struct {
+// CloudPluginInstallationStatus defines the observed state of CloudPluginInstallation.
+type CloudPluginInstallationStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        APIKeyObservation `json:"atProvider,omitempty"`
+	AtProvider        CloudPluginInstallationObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// APIKey is the Schema for the APIKeys API
+// CloudPluginInstallation is the Schema for the CloudPluginInstallations API
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,grafanajet}
-type APIKey struct {
+type CloudPluginInstallation struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              APIKeySpec   `json:"spec"`
-	Status            APIKeyStatus `json:"status,omitempty"`
+	Spec              CloudPluginInstallationSpec   `json:"spec"`
+	Status            CloudPluginInstallationStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// APIKeyList contains a list of APIKeys
-type APIKeyList struct {
+// CloudPluginInstallationList contains a list of CloudPluginInstallations
+type CloudPluginInstallationList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []APIKey `json:"items"`
+	Items           []CloudPluginInstallation `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	APIKey_Kind             = "APIKey"
-	APIKey_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: APIKey_Kind}.String()
-	APIKey_KindAPIVersion   = APIKey_Kind + "." + CRDGroupVersion.String()
-	APIKey_GroupVersionKind = CRDGroupVersion.WithKind(APIKey_Kind)
+	CloudPluginInstallation_Kind             = "CloudPluginInstallation"
+	CloudPluginInstallation_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: CloudPluginInstallation_Kind}.String()
+	CloudPluginInstallation_KindAPIVersion   = CloudPluginInstallation_Kind + "." + CRDGroupVersion.String()
+	CloudPluginInstallation_GroupVersionKind = CRDGroupVersion.WithKind(CloudPluginInstallation_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&APIKey{}, &APIKeyList{})
+	SchemeBuilder.Register(&CloudPluginInstallation{}, &CloudPluginInstallationList{})
 }

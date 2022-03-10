@@ -27,6 +27,7 @@ import (
 
 	"github.com/grafana/crossplane-provider-grafana/config/apikey"
 	"github.com/grafana/crossplane-provider-grafana/config/dashboard"
+	"github.com/grafana/crossplane-provider-grafana/config/plugin"
 )
 
 const (
@@ -56,8 +57,8 @@ func GetProvider() *tjconfig.Provider {
 
 	for _, configure := range []func(provider *tjconfig.Provider){
 		apikey.Configure,
-		// add custom config functions
 		dashboard.Configure,
+		plugin.Configure,
 	} {
 		configure(pc)
 	}

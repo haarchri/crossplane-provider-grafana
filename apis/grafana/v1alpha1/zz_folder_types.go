@@ -27,8 +27,6 @@ import (
 
 type FolderObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
-
-	UID *string `json:"uid,omitempty" tf:"uid,omitempty"`
 }
 
 type FolderParameters struct {
@@ -36,6 +34,10 @@ type FolderParameters struct {
 	// The title of the folder.
 	// +kubebuilder:validation:Required
 	Title *string `json:"title" tf:"title,omitempty"`
+
+	// Unique identifier.
+	// +kubebuilder:validation:Optional
+	UID *string `json:"uid,omitempty" tf:"uid,omitempty"`
 }
 
 // FolderSpec defines the desired state of Folder
