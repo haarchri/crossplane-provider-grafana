@@ -1,0 +1,11 @@
+apiVersion: grafana.jet.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: grafana-cloud-provider
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: grafana-cloud-creds
+      namespace: crossplane
+      key: credentials

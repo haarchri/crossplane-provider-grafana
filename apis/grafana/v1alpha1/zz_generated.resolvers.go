@@ -36,8 +36,8 @@ func (mg *APIKey) ResolveReferences(ctx context.Context, c client.Reader) error 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.CloudStackSlug),
 		Extract:      apikey.SlugExtractor(),
-		Reference:    mg.Spec.ForProvider.CloudStackSlugRef,
-		Selector:     mg.Spec.ForProvider.CloudStackSlugSelector,
+		Reference:    mg.Spec.ForProvider.CloudStackRef,
+		Selector:     mg.Spec.ForProvider.CloudStackSelector,
 		To: reference.To{
 			List:    &CloudStackList{},
 			Managed: &CloudStack{},
@@ -47,7 +47,7 @@ func (mg *APIKey) ResolveReferences(ctx context.Context, c client.Reader) error 
 		return errors.Wrap(err, "mg.Spec.ForProvider.CloudStackSlug")
 	}
 	mg.Spec.ForProvider.CloudStackSlug = reference.ToPtrValue(rsp.ResolvedValue)
-	mg.Spec.ForProvider.CloudStackSlugRef = rsp.ResolvedReference
+	mg.Spec.ForProvider.CloudStackRef = rsp.ResolvedReference
 
 	return nil
 }
