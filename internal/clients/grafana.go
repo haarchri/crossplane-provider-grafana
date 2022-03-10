@@ -39,7 +39,7 @@ const (
 
 	// Grafana credentials environment variable names
 	envAuth          = "GRAFANA_AUTH"
-	envCloudAPIKey   = "GRAFANA_CLOUD_API_URL"
+	envCloudAPIKey   = "GRAFANA_CLOUD_API_KEY"
 	envSMAccessToken = "GRAFANA_SM_ACCESS_TOKEN"
 )
 
