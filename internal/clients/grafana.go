@@ -21,9 +21,11 @@ import (
 	"encoding/json"
 	"fmt"
 
+	xpv1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 	"github.com/crossplane/terrajet/pkg/terraform"
 	"github.com/pkg/errors"
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -81,13 +83,22 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			return ps, errors.Wrap(err, errTrackUsage)
 		}
 
-		data, err := resource.CommonCredentialExtractor(ctx, pc.Spec.Credentials.Source, client, pc.Spec.Credentials.CommonCredentialSelectors)
-		if err != nil {
-			return ps, errors.Wrap(err, errExtractCredentials)
-		}
 		grafanaCreds := map[string]string{}
-		if err := json.Unmarshal(data, &grafanaCreds); err != nil {
-			return ps, errors.Wrap(err, errUnmarshalCredentials)
+		// Connections export configs as direct secret attributes
+		if pc.Spec.Credentials.Source == "Connection" {
+			var err error
+			grafanaCreds, err = ExtractFullSecret(ctx, client, pc.Spec.Credentials.ConnectionSecretRef)
+			if err != nil {
+				return ps, errors.Wrap(err, errExtractCredentials)
+			}
+		} else {
+			data, err := resource.CommonCredentialExtractor(ctx, pc.Spec.Credentials.Source, client, pc.Spec.Credentials.CommonCredentialSelectors)
+			if err != nil {
+				return ps, errors.Wrap(err, errExtractCredentials)
+			}
+			if err := json.Unmarshal(data, &grafanaCreds); err != nil {
+				return ps, errors.Wrap(err, errUnmarshalCredentials)
+			}
 		}
 
 		// set provider configuration
@@ -116,4 +127,21 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 
 		return ps, nil
 	}
+}
+
+// ExtractFullSecret extracts credentials from a Kubernetes secret.
+func ExtractFullSecret(ctx context.Context, client client.Client, s *xpv1.SecretReference) (map[string]string, error) {
+	if s == nil {
+		return nil, errors.New("no secret reference provided")
+	}
+	secret := &corev1.Secret{}
+	if err := client.Get(ctx, types.NamespacedName{Namespace: s.Namespace, Name: s.Name}, secret); err != nil {
+		return nil, errors.Wrap(err, "cannot get referenced secret")
+	}
+	data := map[string]string{}
+	for k, v := range secret.Data {
+		data[k] = string(v)
+	}
+
+	return data, nil
 }
