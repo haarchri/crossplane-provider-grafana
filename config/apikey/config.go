@@ -1,6 +1,8 @@
 package apikey
 
 import (
+	"fmt"
+
 	"github.com/crossplane/terrajet/pkg/config"
 
 	"github.com/crossplane/crossplane-runtime/pkg/fieldpath"
@@ -30,6 +32,17 @@ func Configure(p *config.Provider) { //nolint:gocyclo
 		r.References["cloud_stack_slug"] = config.Reference{
 			Type:      "CloudStack",
 			Extractor: "github.com/grafana/crossplane-provider-grafana/config/apikey.SlugExtractor()",
+		}
+
+		r.Sensitive.AdditionalConnectionDetailsFn = func(attr map[string]interface{}) (map[string][]byte, error) {
+			conn := map[string][]byte{}
+			if a, ok := attr["cloud_stack_slug"].(string); ok {
+				conn["url"] = []byte(fmt.Sprintf("https://%s.grafana.net", a))
+			}
+			if a, ok := attr["key"].(string); ok {
+				conn["auth"] = []byte(a)
+			}
+			return conn, nil
 		}
 	})
 }
