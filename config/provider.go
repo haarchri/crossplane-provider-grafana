@@ -23,9 +23,9 @@ import (
 
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
 	tjname "github.com/crossplane/terrajet/pkg/types/name"
-	"github.com/grafana/crossplane-provider-grafana/config/apikey"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
+	"github.com/grafana/crossplane-provider-grafana/config/apikey"
 	"github.com/grafana/crossplane-provider-grafana/config/dashboard"
 )
 

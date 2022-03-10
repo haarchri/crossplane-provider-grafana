@@ -8,6 +8,7 @@ import (
 	"github.com/crossplane/crossplane-runtime/pkg/resource"
 )
 
+// SlugExtractor extracts the slug of a cloud stack from "status.atProvider.slug"
 func SlugExtractor() reference.ExtractValueFn {
 	return func(mg resource.Managed) string {
 		paved, err := fieldpath.PaveObject(mg)
