@@ -8,7 +8,7 @@ export TERRAFORM_VERSION := 1.1.6
 export TERRAFORM_PROVIDER_SOURCE := grafana/grafana
 export TERRAFORM_PROVIDER_VERSION := 1.20.1
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME := terraform-provider-grafana
-export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX := https://github.com/grafana/terraform-provider-grafana/releases/download/v1.20.1
+export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX := https://github.com/julienduchesne/terraform-provider-grafana/releases/download/v1.21.0-beta.1
 
 PLATFORMS ?= linux_amd64
 
@@ -91,7 +91,8 @@ $(TERRAFORM_PROVIDER_SCHEMA): $(TERRAFORM)
 	@$(TERRAFORM) -chdir=$(TERRAFORM_WORKDIR) providers schema -json=true > $(TERRAFORM_PROVIDER_SCHEMA) 2>> $(TERRAFORM_WORKDIR)/terraform-logs.txt
 	@$(OK) generating provider schema for $(TERRAFORM_PROVIDER_SOURCE) $(TERRAFORM_PROVIDER_VERSION)
 
-generate.init: $(TERRAFORM_PROVIDER_SCHEMA)
+# Commented this out to test custom provider
+#generate.init: $(TERRAFORM_PROVIDER_SCHEMA)
 
 .PHONY: $(TERRAFORM_PROVIDER_SCHEMA)
 # ====================================================================================
