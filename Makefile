@@ -6,9 +6,9 @@ PROJECT_REPO := github.com/grafana/$(PROJECT_NAME)
 
 export TERRAFORM_VERSION := 1.1.6
 export TERRAFORM_PROVIDER_SOURCE := julienduchesne/grafana
-export TERRAFORM_PROVIDER_VERSION := 1.21.0-beta.3
+export TERRAFORM_PROVIDER_VERSION := 1.21.0-beta.4
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME := terraform-provider-grafana
-export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX := https://github.com/julienduchesne/terraform-provider-grafana/releases/download/v1.21.0-beta.3
+export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX := https://github.com/julienduchesne/terraform-provider-grafana/releases/download/v1.21.0-beta.4
 
 PLATFORMS ?= linux_amd64
 
