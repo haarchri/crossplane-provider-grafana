@@ -1,0 +1,10 @@
+apiVersion: grafana.jet.crossplane.io/v1alpha1
+kind: ProviderConfig
+metadata:
+  name: grafana-cloud-instance-provider
+spec:
+  credentials:
+    source: Connection
+    connectionSecretRef:
+      name: my-stack-secret
+      namespace: crossplane
