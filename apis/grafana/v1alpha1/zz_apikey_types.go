@@ -33,17 +33,19 @@ type APIKeyObservation struct {
 
 type APIKeyParameters struct {
 
+	// +kubebuilder:validation:Optional
+	CloudStackRef *v1.Reference `json:"cloudStackRef,omitempty" tf:"-"`
+
+	// +kubebuilder:validation:Optional
+	CloudStackSelector *v1.Selector `json:"cloudStackSelector,omitempty" tf:"-"`
+
 	// If set, the API key will be created for the given Cloud stack. This can be used to bootstrap a management API key for a new stack. **Note**: This requires a cloud token to be configured.
 	// +crossplane:generate:reference:type=CloudStack
 	// +crossplane:generate:reference:extractor=github.com/grafana/crossplane-provider-grafana/config/apikey.SlugExtractor()
+	// +crossplane:generate:reference:refFieldName=CloudStackRef
+	// +crossplane:generate:reference:selectorFieldName=CloudStackSelector
 	// +kubebuilder:validation:Optional
 	CloudStackSlug *string `json:"cloudStackSlug,omitempty" tf:"cloud_stack_slug,omitempty"`
-
-	// +kubebuilder:validation:Optional
-	CloudStackSlugRef *v1.Reference `json:"cloudStackSlugRef,omitempty" tf:"-"`
-
-	// +kubebuilder:validation:Optional
-	CloudStackSlugSelector *v1.Selector `json:"cloudStackSlugSelector,omitempty" tf:"-"`
 
 	// +kubebuilder:validation:Required
 	Name *string `json:"name" tf:"name,omitempty"`

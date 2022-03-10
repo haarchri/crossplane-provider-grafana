@@ -1,0 +1,12 @@
+apiVersion: grafana.grafana.jet.crossplane.io/v1alpha1
+kind: APIKey
+metadata:
+  name: my-stack-key
+spec:
+  forProvider:
+    name: 'Crossplane'
+    role: 'Admin'
+    cloudStackRef:
+      name: my-stack
+  providerConfigRef:
+    name: grafana-cloud-provider

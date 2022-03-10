@@ -17,7 +17,7 @@ func SlugExtractor() reference.ExtractValueFn {
 		if err != nil {
 			return ""
 		}
-		r, err := paved.GetString("status.atProvider.slug")
+		r, err := paved.GetString("spec.forProvider.slug")
 		if err != nil {
 			return ""
 		}
@@ -30,8 +30,10 @@ func SlugExtractor() reference.ExtractValueFn {
 func Configure(p *config.Provider) { //nolint:gocyclo
 	p.AddResourceConfigurator("grafana_api_key", func(r *config.Resource) {
 		r.References["cloud_stack_slug"] = config.Reference{
-			Type:      "CloudStack",
-			Extractor: "github.com/grafana/crossplane-provider-grafana/config/apikey.SlugExtractor()",
+			Type:              "CloudStack",
+			Extractor:         "github.com/grafana/crossplane-provider-grafana/config/apikey.SlugExtractor()",
+			RefFieldName:      "CloudStackRef",
+			SelectorFieldName: "CloudStackSelector",
 		}
 
 		r.Sensitive.AdditionalConnectionDetailsFn = func(attr map[string]interface{}) (map[string][]byte, error) {
