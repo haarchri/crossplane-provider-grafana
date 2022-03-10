@@ -1136,7 +1136,7 @@ func (in *DashboardParameters) DeepCopyInto(out *DashboardParameters) {
 	}
 	if in.Folder != nil {
 		in, out := &in.Folder, &out.Folder
-		*out = new(float64)
+		*out = new(string)
 		**out = **in
 	}
 	if in.Message != nil {
