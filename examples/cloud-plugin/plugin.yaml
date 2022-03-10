@@ -1,4 +1,3 @@
-
 apiVersion: grafana.grafana.jet.crossplane.io/v1alpha1
 kind: CloudPluginInstallation
 metadata:
