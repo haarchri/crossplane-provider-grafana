@@ -36,6 +36,14 @@ type CloudStackObservation struct {
 
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
+	LogsName *string `json:"logsName,omitempty" tf:"logs_name,omitempty"`
+
+	LogsStatus *string `json:"logsStatus,omitempty" tf:"logs_status,omitempty"`
+
+	LogsURL *string `json:"logsUrl,omitempty" tf:"logs_url,omitempty"`
+
+	LogsUserID *float64 `json:"logsUserId,omitempty" tf:"logs_user_id,omitempty"`
+
 	OrgID *float64 `json:"orgId,omitempty" tf:"org_id,omitempty"`
 
 	OrgName *string `json:"orgName,omitempty" tf:"org_name,omitempty"`

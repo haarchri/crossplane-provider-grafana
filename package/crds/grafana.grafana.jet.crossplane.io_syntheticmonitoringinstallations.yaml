@@ -5,7 +5,7 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: cloudstacks.grafana.grafana.jet.crossplane.io
+  name: syntheticmonitoringinstallations.grafana.grafana.jet.crossplane.io
 spec:
   group: grafana.grafana.jet.crossplane.io
   names:
@@ -13,10 +13,10 @@ spec:
     - crossplane
     - managed
     - grafanajet
-    kind: CloudStack
-    listKind: CloudStackList
-    plural: cloudstacks
-    singular: cloudstack
+    kind: SyntheticMonitoringInstallation
+    listKind: SyntheticMonitoringInstallationList
+    plural: syntheticmonitoringinstallations
+    singular: syntheticmonitoringinstallation
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: CloudStack is the Schema for the CloudStacks API
+        description: SyntheticMonitoringInstallation is the Schema for the SyntheticMonitoringInstallations
+          API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +51,8 @@ spec:
           metadata:
             type: object
           spec:
-            description: CloudStackSpec defines the desired state of CloudStack
+            description: SyntheticMonitoringInstallationSpec defines the desired state
+              of SyntheticMonitoringInstallation
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,35 +65,40 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  description:
-                    description: Description of stack.
-                    type: string
-                  name:
-                    description: Name of stack. Conventionally matches the url of
-                      the instance (e.g. “<stack_slug>.grafana.net”).
-                    type: string
-                  regionSlug:
-                    description: Region slug to assign to this stack. Changing region
-                      will destroy the existing stack and create a new one in the
-                      desired region
-                    type: string
-                  slug:
-                    description: Subdomain that the Grafana instance will be available
-                      at (i.e. setting slug to “<stack_slug>” will make the instance
-                      available at “https://<stack_slug>.grafana.net".
-                    type: string
-                  url:
-                    description: Custom URL for the Grafana instance. Must have a
-                      CNAME setup to point to `.grafana.net` before creating the stack
-                    type: string
-                  waitForReadiness:
-                    description: Whether to wait for readiness of the stack after
-                      creating it. The check is a HEAD request to the stack URL (Grafana
-                      instance). Defaults to `true`.
-                    type: boolean
+                  logsInstanceId:
+                    description: The ID of the logs instance to install SM on (stack's
+                      `logs_user_id` attribute).
+                    type: number
+                  metricsInstanceId:
+                    description: The ID of the metrics instance to install SM on (stack's
+                      `prometheus_user_id` attribute).
+                    type: number
+                  metricsPublisherKeySecretRef:
+                    description: The Cloud API Key with the `MetricsPublisher` role
+                      used to publish metrics to the SM API
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
+                  stackId:
+                    description: The ID of the stack to install SM on.
+                    type: number
                 required:
-                - name
-                - slug
+                - logsInstanceId
+                - metricsInstanceId
+                - metricsPublisherKeySecretRef
+                - stackId
                 type: object
               providerConfigRef:
                 default:
@@ -138,47 +145,14 @@ spec:
             - forProvider
             type: object
           status:
-            description: CloudStackStatus defines the observed state of CloudStack.
+            description: SyntheticMonitoringInstallationStatus defines the observed
+              state of SyntheticMonitoringInstallation.
             properties:
               atProvider:
                 properties:
-                  alertmanagerName:
-                    type: string
-                  alertmanagerStatus:
-                    type: string
-                  alertmanagerUrl:
-                    type: string
-                  alertmanagerUserId:
-                    type: number
                   id:
                     type: string
-                  logsName:
-                    type: string
-                  logsStatus:
-                    type: string
-                  logsUrl:
-                    type: string
-                  logsUserId:
-                    type: number
-                  orgId:
-                    type: number
-                  orgName:
-                    type: string
-                  orgSlug:
-                    type: string
-                  prometheusName:
-                    type: string
-                  prometheusRemoteEndpoint:
-                    type: string
-                  prometheusRemoteWriteEndpoint:
-                    type: string
-                  prometheusStatus:
-                    type: string
-                  prometheusUrl:
-                    type: string
-                  prometheusUserId:
-                    type: number
-                  status:
+                  smAccessToken:
                     type: string
                 type: object
               conditions:

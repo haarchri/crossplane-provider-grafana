@@ -39,6 +39,7 @@ import (
 	report "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/report"
 	role "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/role"
 	syntheticmonitoringcheck "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringcheck"
+	syntheticmonitoringinstallation "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringinstallation"
 	syntheticmonitoringprobe "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringprobe"
 	team "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/team"
 	teamexternalgroup "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/teamexternalgroup"
@@ -69,6 +70,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		report.Setup,
 		role.Setup,
 		syntheticmonitoringcheck.Setup,
+		syntheticmonitoringinstallation.Setup,
 		syntheticmonitoringprobe.Setup,
 		team.Setup,
 		teamexternalgroup.Setup,

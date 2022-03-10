@@ -1027,6 +1027,62 @@ func (mg *SyntheticMonitoringCheck) SetWriteConnectionSecretToReference(r *xpv1.
 	mg.Spec.WriteConnectionSecretToReference = r
 }
 
+// GetCondition of this SyntheticMonitoringInstallation.
+func (mg *SyntheticMonitoringInstallation) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
+	return mg.Status.GetCondition(ct)
+}
+
+// GetDeletionPolicy of this SyntheticMonitoringInstallation.
+func (mg *SyntheticMonitoringInstallation) GetDeletionPolicy() xpv1.DeletionPolicy {
+	return mg.Spec.DeletionPolicy
+}
+
+// GetProviderConfigReference of this SyntheticMonitoringInstallation.
+func (mg *SyntheticMonitoringInstallation) GetProviderConfigReference() *xpv1.Reference {
+	return mg.Spec.ProviderConfigReference
+}
+
+/*
+GetProviderReference of this SyntheticMonitoringInstallation.
+Deprecated: Use GetProviderConfigReference.
+*/
+func (mg *SyntheticMonitoringInstallation) GetProviderReference() *xpv1.Reference {
+	return mg.Spec.ProviderReference
+}
+
+// GetWriteConnectionSecretToReference of this SyntheticMonitoringInstallation.
+func (mg *SyntheticMonitoringInstallation) GetWriteConnectionSecretToReference() *xpv1.SecretReference {
+	return mg.Spec.WriteConnectionSecretToReference
+}
+
+// SetConditions of this SyntheticMonitoringInstallation.
+func (mg *SyntheticMonitoringInstallation) SetConditions(c ...xpv1.Condition) {
+	mg.Status.SetConditions(c...)
+}
+
+// SetDeletionPolicy of this SyntheticMonitoringInstallation.
+func (mg *SyntheticMonitoringInstallation) SetDeletionPolicy(r xpv1.DeletionPolicy) {
+	mg.Spec.DeletionPolicy = r
+}
+
+// SetProviderConfigReference of this SyntheticMonitoringInstallation.
+func (mg *SyntheticMonitoringInstallation) SetProviderConfigReference(r *xpv1.Reference) {
+	mg.Spec.ProviderConfigReference = r
+}
+
+/*
+SetProviderReference of this SyntheticMonitoringInstallation.
+Deprecated: Use SetProviderConfigReference.
+*/
+func (mg *SyntheticMonitoringInstallation) SetProviderReference(r *xpv1.Reference) {
+	mg.Spec.ProviderReference = r
+}
+
+// SetWriteConnectionSecretToReference of this SyntheticMonitoringInstallation.
+func (mg *SyntheticMonitoringInstallation) SetWriteConnectionSecretToReference(r *xpv1.SecretReference) {
+	mg.Spec.WriteConnectionSecretToReference = r
+}
+
 // GetCondition of this SyntheticMonitoringProbe.
 func (mg *SyntheticMonitoringProbe) GetCondition(ct xpv1.ConditionType) xpv1.Condition {
 	return mg.Status.GetCondition(ct)
