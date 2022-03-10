@@ -5,7 +5,7 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: apikeys.grafana.grafana.jet.crossplane.io
+  name: librarypanels.grafana.grafana.jet.crossplane.io
 spec:
   group: grafana.grafana.jet.crossplane.io
   names:
@@ -13,10 +13,10 @@ spec:
     - crossplane
     - managed
     - grafanajet
-    kind: APIKey
-    listKind: APIKeyList
-    plural: apikeys
-    singular: apikey
+    kind: LibraryPanel
+    listKind: LibraryPanelList
+    plural: librarypanels
+    singular: librarypanel
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: APIKey is the Schema for the APIKeys API
+        description: LibraryPanel is the Schema for the LibraryPanels API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: APIKeySpec defines the desired state of APIKey
+            description: LibraryPanelSpec defines the desired state of LibraryPanel
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,21 +63,26 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  cloudStackSlug:
-                    description: 'If set, the API key will be created for the given
-                      Cloud stack. This can be used to bootstrap a management API
-                      key for a new stack. **Note**: This requires a cloud token to
-                      be configured.'
+                  folderId:
+                    description: ID of the folder where the library panel is stored.
+                    type: number
+                  modelJson:
+                    description: The JSON model for the library panel.
                     type: string
                   name:
+                    description: Name of the library panel.
                     type: string
-                  role:
+                  uid:
+                    description: The unique identifier (UID) of a library panel uniquely
+                      identifies library panels between multiple Grafana installs.
+                      It’s automatically generated unless you specify it during library
+                      panel creation.The UID provides consistent URLs for accessing
+                      library panels and when syncing library panels between multiple
+                      Grafana installs.
                     type: string
-                  secondsToLive:
-                    type: number
                 required:
+                - modelJson
                 - name
-                - role
                 type: object
               providerConfigRef:
                 default:
@@ -124,14 +129,34 @@ spec:
             - forProvider
             type: object
           status:
-            description: APIKeyStatus defines the observed state of APIKey.
+            description: LibraryPanelStatus defines the observed state of LibraryPanel.
             properties:
               atProvider:
                 properties:
-                  expiration:
+                  created:
+                    type: string
+                  dashboardIds:
+                    items:
+                      type: number
+                    type: array
+                  description:
+                    type: string
+                  folderName:
+                    type: string
+                  folderUid:
                     type: string
                   id:
                     type: string
+                  orgId:
+                    type: number
+                  panelId:
+                    type: number
+                  type:
+                    type: string
+                  updated:
+                    type: string
+                  version:
+                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.

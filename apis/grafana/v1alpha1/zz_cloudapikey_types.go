@@ -25,73 +25,70 @@ import (
 	v1 "github.com/crossplane/crossplane-runtime/apis/common/v1"
 )
 
-type TeamObservation struct {
+type CloudAPIKeyObservation struct {
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
-
-	TeamID *float64 `json:"teamId,omitempty" tf:"team_id,omitempty"`
 }
 
-type TeamParameters struct {
+type CloudAPIKeyParameters struct {
 
-	// An email address for the team.
-	// +kubebuilder:validation:Optional
-	Email *string `json:"email,omitempty" tf:"email,omitempty"`
+	// The slug of the organization to create the API key in. This is the same slug as the organization name in the URL.
+	// +kubebuilder:validation:Required
+	CloudOrgSlug *string `json:"cloudOrgSlug" tf:"cloud_org_slug,omitempty"`
 
-	// A set of email addresses corresponding to users who should be given membership
-	// to the team. Note: users specified here must already exist in Grafana.
-	// +kubebuilder:validation:Optional
-	Members []*string `json:"members,omitempty" tf:"members,omitempty"`
-
-	// The display name for the Grafana team created.
+	// Name of the API key.
 	// +kubebuilder:validation:Required
 	Name *string `json:"name" tf:"name,omitempty"`
+
+	// Role of the API key. Should be one of [Viewer Editor Admin MetricsPublisher PluginPublisher]. See https://grafana.com/docs/grafana-cloud/api/#create-api-key for details.
+	// +kubebuilder:validation:Required
+	Role *string `json:"role" tf:"role,omitempty"`
 }
 
-// TeamSpec defines the desired state of Team
-type TeamSpec struct {
+// CloudAPIKeySpec defines the desired state of CloudAPIKey
+type CloudAPIKeySpec struct {
 	v1.ResourceSpec `json:",inline"`
-	ForProvider     TeamParameters `json:"forProvider"`
+	ForProvider     CloudAPIKeyParameters `json:"forProvider"`
 }
 
-// TeamStatus defines the observed state of Team.
-type TeamStatus struct {
+// CloudAPIKeyStatus defines the observed state of CloudAPIKey.
+type CloudAPIKeyStatus struct {
 	v1.ResourceStatus `json:",inline"`
-	AtProvider        TeamObservation `json:"atProvider,omitempty"`
+	AtProvider        CloudAPIKeyObservation `json:"atProvider,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// Team is the Schema for the Teams API
+// CloudAPIKey is the Schema for the CloudAPIKeys API
 // +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
 // +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,grafanajet}
-type Team struct {
+type CloudAPIKey struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              TeamSpec   `json:"spec"`
-	Status            TeamStatus `json:"status,omitempty"`
+	Spec              CloudAPIKeySpec   `json:"spec"`
+	Status            CloudAPIKeyStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// TeamList contains a list of Teams
-type TeamList struct {
+// CloudAPIKeyList contains a list of CloudAPIKeys
+type CloudAPIKeyList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Team `json:"items"`
+	Items           []CloudAPIKey `json:"items"`
 }
 
 // Repository type metadata.
 var (
-	Team_Kind             = "Team"
-	Team_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: Team_Kind}.String()
-	Team_KindAPIVersion   = Team_Kind + "." + CRDGroupVersion.String()
-	Team_GroupVersionKind = CRDGroupVersion.WithKind(Team_Kind)
+	CloudAPIKey_Kind             = "CloudAPIKey"
+	CloudAPIKey_GroupKind        = schema.GroupKind{Group: CRDGroup, Kind: CloudAPIKey_Kind}.String()
+	CloudAPIKey_KindAPIVersion   = CloudAPIKey_Kind + "." + CRDGroupVersion.String()
+	CloudAPIKey_GroupVersionKind = CRDGroupVersion.WithKind(CloudAPIKey_Kind)
 )
 
 func init() {
-	SchemeBuilder.Register(&Team{}, &TeamList{})
+	SchemeBuilder.Register(&CloudAPIKey{}, &CloudAPIKeyList{})
 }

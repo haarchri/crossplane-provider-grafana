@@ -33,6 +33,10 @@ type APIKeyObservation struct {
 
 type APIKeyParameters struct {
 
+	// If set, the API key will be created for the given Cloud stack. This can be used to bootstrap a management API key for a new stack. **Note**: This requires a cloud token to be configured.
+	// +kubebuilder:validation:Optional
+	CloudStackSlug *string `json:"cloudStackSlug,omitempty" tf:"cloud_stack_slug,omitempty"`
+
 	// +kubebuilder:validation:Required
 	Name *string `json:"name" tf:"name,omitempty"`
 

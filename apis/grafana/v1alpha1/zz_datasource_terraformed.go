@@ -32,7 +32,7 @@ func (mg *DataSource) GetTerraformResourceType() string {
 
 // GetConnectionDetailsMapping for this DataSource
 func (tr *DataSource) GetConnectionDetailsMapping() map[string]string {
-	return map[string]string{"basic_auth_password": "spec.forProvider.basicAuthPasswordSecretRef", "http_headers": "spec.forProvider.httpHeadersSecretRef", "password": "spec.forProvider.passwordSecretRef", "secure_json_data[*].access_key": "spec.forProvider.secureJSONData[*].accessKeySecretRef", "secure_json_data[*].basic_auth_password": "spec.forProvider.secureJSONData[*].basicAuthPasswordSecretRef", "secure_json_data[*].password": "spec.forProvider.secureJSONData[*].passwordSecretRef", "secure_json_data[*].private_key": "spec.forProvider.secureJSONData[*].privateKeySecretRef", "secure_json_data[*].secret_key": "spec.forProvider.secureJSONData[*].secretKeySecretRef", "secure_json_data[*].sigv4_access_key": "spec.forProvider.secureJSONData[*].sigv4AccessKeySecretRef", "secure_json_data[*].sigv4_secret_key": "spec.forProvider.secureJSONData[*].sigv4SecretKeySecretRef", "secure_json_data[*].tls_ca_cert": "spec.forProvider.secureJSONData[*].tlsCACertSecretRef", "secure_json_data[*].tls_client_cert": "spec.forProvider.secureJSONData[*].tlsClientCertSecretRef", "secure_json_data[*].tls_client_key": "spec.forProvider.secureJSONData[*].tlsClientKeySecretRef"}
+	return map[string]string{"basic_auth_password": "spec.forProvider.basicAuthPasswordSecretRef", "http_headers": "spec.forProvider.httpHeadersSecretRef", "password": "spec.forProvider.passwordSecretRef", "secure_json_data[*].access_key": "spec.forProvider.secureJSONData[*].accessKeySecretRef", "secure_json_data[*].access_token": "spec.forProvider.secureJSONData[*].accessTokenSecretRef", "secure_json_data[*].auth_token": "spec.forProvider.secureJSONData[*].authTokenSecretRef", "secure_json_data[*].basic_auth_password": "spec.forProvider.secureJSONData[*].basicAuthPasswordSecretRef", "secure_json_data[*].password": "spec.forProvider.secureJSONData[*].passwordSecretRef", "secure_json_data[*].private_key": "spec.forProvider.secureJSONData[*].privateKeySecretRef", "secure_json_data[*].secret_key": "spec.forProvider.secureJSONData[*].secretKeySecretRef", "secure_json_data[*].sigv4_access_key": "spec.forProvider.secureJSONData[*].sigv4AccessKeySecretRef", "secure_json_data[*].sigv4_secret_key": "spec.forProvider.secureJSONData[*].sigv4SecretKeySecretRef", "secure_json_data[*].tls_ca_cert": "spec.forProvider.secureJSONData[*].tlsCACertSecretRef", "secure_json_data[*].tls_client_cert": "spec.forProvider.secureJSONData[*].tlsClientCertSecretRef", "secure_json_data[*].tls_client_key": "spec.forProvider.secureJSONData[*].tlsClientKeySecretRef"}
 }
 
 // GetObservation of this DataSource
@@ -96,5 +96,5 @@ func (tr *DataSource) LateInitialize(attrs []byte) (bool, error) {
 
 // GetTerraformSchemaVersion returns the associated Terraform schema version
 func (tr *DataSource) GetTerraformSchemaVersion() int {
-	return 0
+	return 1
 }
