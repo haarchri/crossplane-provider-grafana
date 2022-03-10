@@ -24,6 +24,8 @@ import (
 	tjconfig "github.com/crossplane/terrajet/pkg/config"
 	tjname "github.com/crossplane/terrajet/pkg/types/name"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+
+	"github.com/grafana/crossplane-provider-grafana/config/dashboard"
 )
 
 const (
@@ -53,6 +55,7 @@ func GetProvider() *tjconfig.Provider {
 
 	for _, configure := range []func(provider *tjconfig.Provider){
 		// add custom config functions
+		dashboard.Configure,
 	} {
 		configure(pc)
 	}
