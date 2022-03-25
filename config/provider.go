@@ -43,9 +43,8 @@ func GetProvider() *tjconfig.Provider {
 	defaultResourceFn := func(name string, terraformResource *schema.Resource, opts ...tjconfig.ResourceOption) *tjconfig.Resource {
 		r := tjconfig.DefaultResource(name, terraformResource)
 		words := strings.Split(name, "_")
-		group := "" //words[0] is always 'grafana'
 		kind := tjname.NewFromSnake(strings.Join(words[1:], "_")).Camel
-		r.ShortGroup = group
+		r.ShortGroup = ""
 		r.Kind = kind
 		// Add any provider-specific defaulting here. For example:
 		r.ExternalName = tjconfig.IdentifierFromProvider
