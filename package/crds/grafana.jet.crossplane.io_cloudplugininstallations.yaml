@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: folders.grafana.grafana.jet.crossplane.io
+  name: cloudplugininstallations.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: Folder
-    listKind: FolderList
-    plural: folders
-    singular: folder
+    kind: CloudPluginInstallation
+    listKind: CloudPluginInstallationList
+    plural: cloudplugininstallations
+    singular: cloudplugininstallation
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Folder is the Schema for the Folders API
+        description: CloudPluginInstallation is the Schema for the CloudPluginInstallations
+          API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +51,8 @@ spec:
           metadata:
             type: object
           spec:
-            description: FolderSpec defines the desired state of Folder
+            description: CloudPluginInstallationSpec defines the desired state of
+              CloudPluginInstallation
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,14 +65,41 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  title:
-                    description: The title of the folder.
+                  slug:
+                    description: Slug of the plugin to be installed.
                     type: string
-                  uid:
-                    description: Unique identifier.
+                  stackRef:
+                    description: A Reference to a named object.
+                    properties:
+                      name:
+                        description: Name of the referenced object.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  stackSelector:
+                    description: A Selector selects an object.
+                    properties:
+                      matchControllerRef:
+                        description: MatchControllerRef ensures an object with the
+                          same controller reference as the selecting object is selected.
+                        type: boolean
+                      matchLabels:
+                        additionalProperties:
+                          type: string
+                        description: MatchLabels ensures an object with matching labels
+                          is selected.
+                        type: object
+                    type: object
+                  stackSlug:
+                    description: The stack id to which the plugin should be installed.
+                    type: string
+                  version:
+                    description: Version of the plugin to be installed.
                     type: string
                 required:
-                - title
+                - slug
+                - version
                 type: object
               providerConfigRef:
                 default:
@@ -117,7 +146,8 @@ spec:
             - forProvider
             type: object
           status:
-            description: FolderStatus defines the observed state of Folder.
+            description: CloudPluginInstallationStatus defines the observed state
+              of CloudPluginInstallation.
             properties:
               atProvider:
                 properties:

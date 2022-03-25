@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: folderpermissions.grafana.grafana.jet.crossplane.io
+  name: organizations.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: FolderPermission
-    listKind: FolderPermissionList
-    plural: folderpermissions
-    singular: folderpermission
+    kind: Organization
+    listKind: OrganizationList
+    plural: organizations
+    singular: organization
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: FolderPermission is the Schema for the FolderPermissions API
+        description: Organization is the Schema for the Organizations API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: FolderPermissionSpec defines the desired state of FolderPermission
+            description: OrganizationSpec defines the desired state of Organization
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,37 +63,52 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  folderUid:
-                    description: The UID of the folder.
+                  adminUser:
+                    description: The login name of the configured default admin user
+                      for the Grafana installation. If unset, this value defaults
+                      to admin, the Grafana default. Grafana adds the default admin
+                      user to all organizations automatically upon creation, and this
+                      parameter keeps Terraform from removing it from organizations.
+                      Defaults to `admin`.
                     type: string
-                  permissions:
-                    description: The permission items to add/update. Items that are
-                      omitted from the list will be removed.
+                  admins:
+                    description: 'A list of email addresses corresponding to users
+                      who should be given admin access to the organization. Note:
+                      users specified here must already exist in Grafana unless ''create_users''
+                      is set to true.'
                     items:
-                      properties:
-                        permission:
-                          description: Permission to associate with item. Must be
-                            one of `View`, `Edit`, or `Admin`.
-                          type: string
-                        role:
-                          description: Manage permissions for `Viewer` or `Editor`
-                            roles.
-                          type: string
-                        teamId:
-                          description: ID of the team to manage permissions for. Defaults
-                            to `0`.
-                          type: number
-                        userId:
-                          description: ID of the user to manage permissions for. Defaults
-                            to `0`.
-                          type: number
-                      required:
-                      - permission
-                      type: object
+                      type: string
+                    type: array
+                  createUsers:
+                    description: Whether or not to create Grafana users specified
+                      in the organization's membership if they don't already exist
+                      in Grafana. If unspecified, this parameter defaults to true,
+                      creating placeholder users with the name, login, and email set
+                      to the email of the user, and a random password. Setting this
+                      option to false will cause an error to be thrown for any users
+                      that do not already exist in Grafana. Defaults to `true`.
+                    type: boolean
+                  editors:
+                    description: 'A list of email addresses corresponding to users
+                      who should be given editor access to the organization. Note:
+                      users specified here must already exist in Grafana unless ''create_users''
+                      is set to true.'
+                    items:
+                      type: string
+                    type: array
+                  name:
+                    description: The display name for the Grafana organization created.
+                    type: string
+                  viewers:
+                    description: 'A list of email addresses corresponding to users
+                      who should be given viewer access to the organization. Note:
+                      users specified here must already exist in Grafana unless ''create_users''
+                      is set to true.'
+                    items:
+                      type: string
                     type: array
                 required:
-                - folderUid
-                - permissions
+                - name
                 type: object
               providerConfigRef:
                 default:
@@ -140,12 +155,14 @@ spec:
             - forProvider
             type: object
           status:
-            description: FolderPermissionStatus defines the observed state of FolderPermission.
+            description: OrganizationStatus defines the observed state of Organization.
             properties:
               atProvider:
                 properties:
                   id:
                     type: string
+                  orgId:
+                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.

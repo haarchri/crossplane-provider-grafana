@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: dashboardpermissions.grafana.grafana.jet.crossplane.io
+  name: cloudstacks.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: DashboardPermission
-    listKind: DashboardPermissionList
-    plural: dashboardpermissions
-    singular: dashboardpermission
+    kind: CloudStack
+    listKind: CloudStackList
+    plural: cloudstacks
+    singular: cloudstack
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,8 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: DashboardPermission is the Schema for the DashboardPermissions
-          API
+        description: CloudStack is the Schema for the CloudStacks API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -51,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: DashboardPermissionSpec defines the desired state of DashboardPermission
+            description: CloudStackSpec defines the desired state of CloudStack
             properties:
               deletionPolicy:
                 default: Delete
@@ -64,37 +63,35 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  dashboardId:
-                    description: ID of the dashboard to apply permissions to.
-                    type: number
-                  permissions:
-                    description: The permission items to add/update. Items that are
-                      omitted from the list will be removed.
-                    items:
-                      properties:
-                        permission:
-                          description: Permission to associate with item. Must be
-                            one of `View`, `Edit`, or `Admin`.
-                          type: string
-                        role:
-                          description: Manage permissions for `Viewer` or `Editor`
-                            roles.
-                          type: string
-                        teamId:
-                          description: ID of the team to manage permissions for. Defaults
-                            to `0`.
-                          type: number
-                        userId:
-                          description: ID of the user to manage permissions for. Defaults
-                            to `0`.
-                          type: number
-                      required:
-                      - permission
-                      type: object
-                    type: array
+                  description:
+                    description: Description of stack.
+                    type: string
+                  name:
+                    description: Name of stack. Conventionally matches the url of
+                      the instance (e.g. “<stack_slug>.grafana.net”).
+                    type: string
+                  regionSlug:
+                    description: Region slug to assign to this stack. Changing region
+                      will destroy the existing stack and create a new one in the
+                      desired region
+                    type: string
+                  slug:
+                    description: Subdomain that the Grafana instance will be available
+                      at (i.e. setting slug to “<stack_slug>” will make the instance
+                      available at “https://<stack_slug>.grafana.net".
+                    type: string
+                  url:
+                    description: Custom URL for the Grafana instance. Must have a
+                      CNAME setup to point to `.grafana.net` before creating the stack
+                    type: string
+                  waitForReadiness:
+                    description: Whether to wait for readiness of the stack after
+                      creating it. The check is a HEAD request to the stack URL (Grafana
+                      instance). Defaults to `true`.
+                    type: boolean
                 required:
-                - dashboardId
-                - permissions
+                - name
+                - slug
                 type: object
               providerConfigRef:
                 default:
@@ -141,11 +138,47 @@ spec:
             - forProvider
             type: object
           status:
-            description: DashboardPermissionStatus defines the observed state of DashboardPermission.
+            description: CloudStackStatus defines the observed state of CloudStack.
             properties:
               atProvider:
                 properties:
+                  alertmanagerName:
+                    type: string
+                  alertmanagerStatus:
+                    type: string
+                  alertmanagerUrl:
+                    type: string
+                  alertmanagerUserId:
+                    type: number
                   id:
+                    type: string
+                  logsName:
+                    type: string
+                  logsStatus:
+                    type: string
+                  logsUrl:
+                    type: string
+                  logsUserId:
+                    type: number
+                  orgId:
+                    type: number
+                  orgName:
+                    type: string
+                  orgSlug:
+                    type: string
+                  prometheusName:
+                    type: string
+                  prometheusRemoteEndpoint:
+                    type: string
+                  prometheusRemoteWriteEndpoint:
+                    type: string
+                  prometheusStatus:
+                    type: string
+                  prometheusUrl:
+                    type: string
+                  prometheusUserId:
+                    type: number
+                  status:
                     type: string
                 type: object
               conditions:

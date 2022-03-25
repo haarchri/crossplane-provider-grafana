@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: playlists.grafana.grafana.jet.crossplane.io
+  name: users.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: Playlist
-    listKind: PlaylistList
-    plural: playlists
-    singular: playlist
+    kind: User
+    listKind: UserList
+    plural: users
+    singular: user
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Playlist is the Schema for the Playlists API
+        description: User is the Schema for the Users API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: PlaylistSpec defines the desired state of Playlist
+            description: UserSpec defines the desired state of User
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,31 +63,38 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  interval:
+                  email:
+                    description: The email address of the Grafana user.
                     type: string
-                  item:
-                    items:
-                      properties:
-                        order:
-                          type: number
-                        title:
-                          type: string
-                        type:
-                          type: string
-                        value:
-                          type: string
-                      required:
-                      - order
-                      - title
-                      type: object
-                    type: array
+                  isAdmin:
+                    description: Whether to make user an admin. Defaults to `false`.
+                    type: boolean
+                  login:
+                    description: The username for the Grafana user.
+                    type: string
                   name:
-                    description: The name of the playlist.
+                    description: The display name for the Grafana user.
                     type: string
+                  passwordSecretRef:
+                    description: The password for the Grafana user.
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                 required:
-                - interval
-                - item
-                - name
+                - email
+                - passwordSecretRef
                 type: object
               providerConfigRef:
                 default:
@@ -134,14 +141,14 @@ spec:
             - forProvider
             type: object
           status:
-            description: PlaylistStatus defines the observed state of Playlist.
+            description: UserStatus defines the observed state of User.
             properties:
               atProvider:
                 properties:
                   id:
                     type: string
-                  orgId:
-                    type: string
+                  userId:
+                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.

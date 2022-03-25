@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: datasourcepermissions.grafana.grafana.jet.crossplane.io
+  name: folderpermissions.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: DataSourcePermission
-    listKind: DataSourcePermissionList
-    plural: datasourcepermissions
-    singular: datasourcepermission
+    kind: FolderPermission
+    listKind: FolderPermissionList
+    plural: folderpermissions
+    singular: folderpermission
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,8 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: DataSourcePermission is the Schema for the DataSourcePermissions
-          API
+        description: FolderPermission is the Schema for the FolderPermissions API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -51,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: DataSourcePermissionSpec defines the desired state of DataSourcePermission
+            description: FolderPermissionSpec defines the desired state of FolderPermission
             properties:
               deletionPolicy:
                 default: Delete
@@ -64,9 +63,9 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  datasourceId:
-                    description: ID of the datasource to apply permissions to.
-                    type: number
+                  folderUid:
+                    description: The UID of the folder.
+                    type: string
                   permissions:
                     description: The permission items to add/update. Items that are
                       omitted from the list will be removed.
@@ -74,7 +73,11 @@ spec:
                       properties:
                         permission:
                           description: Permission to associate with item. Must be
-                            `Query`.
+                            one of `View`, `Edit`, or `Admin`.
+                          type: string
+                        role:
+                          description: Manage permissions for `Viewer` or `Editor`
+                            roles.
                           type: string
                         teamId:
                           description: ID of the team to manage permissions for. Defaults
@@ -89,7 +92,7 @@ spec:
                       type: object
                     type: array
                 required:
-                - datasourceId
+                - folderUid
                 - permissions
                 type: object
               providerConfigRef:
@@ -137,8 +140,7 @@ spec:
             - forProvider
             type: object
           status:
-            description: DataSourcePermissionStatus defines the observed state of
-              DataSourcePermission.
+            description: FolderPermissionStatus defines the observed state of FolderPermission.
             properties:
               atProvider:
                 properties:

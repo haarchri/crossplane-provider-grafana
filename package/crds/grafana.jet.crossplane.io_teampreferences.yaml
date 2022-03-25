@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: syntheticmonitoringinstallations.grafana.grafana.jet.crossplane.io
+  name: teampreferences.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: SyntheticMonitoringInstallation
-    listKind: SyntheticMonitoringInstallationList
-    plural: syntheticmonitoringinstallations
-    singular: syntheticmonitoringinstallation
+    kind: TeamPreferences
+    listKind: TeamPreferencesList
+    plural: teampreferences
+    singular: teampreferences
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,8 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: SyntheticMonitoringInstallation is the Schema for the SyntheticMonitoringInstallations
-          API
+        description: TeamPreferences is the Schema for the TeamPreferencess API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -51,8 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: SyntheticMonitoringInstallationSpec defines the desired state
-              of SyntheticMonitoringInstallation
+            description: TeamPreferencesSpec defines the desired state of TeamPreferences
             properties:
               deletionPolicy:
                 default: Delete
@@ -65,40 +63,23 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  logsInstanceId:
-                    description: The ID of the logs instance to install SM on (stack's
-                      `logs_user_id` attribute).
+                  homeDashboardId:
+                    description: The numeric ID of the dashboard to display when a
+                      team member logs in.
                     type: number
-                  metricsInstanceId:
-                    description: The ID of the metrics instance to install SM on (stack's
-                      `prometheus_user_id` attribute).
+                  teamId:
+                    description: The numeric team ID.
                     type: number
-                  metricsPublisherKeySecretRef:
-                    description: The Cloud API Key with the `MetricsPublisher` role
-                      used to publish metrics to the SM API
-                    properties:
-                      key:
-                        description: The key to select.
-                        type: string
-                      name:
-                        description: Name of the secret.
-                        type: string
-                      namespace:
-                        description: Namespace of the secret.
-                        type: string
-                    required:
-                    - key
-                    - name
-                    - namespace
-                    type: object
-                  stackId:
-                    description: The ID of the stack to install SM on.
-                    type: number
+                  theme:
+                    description: The theme for the specified team. Available themes
+                      are `light`, `dark`, or an empty string for the default theme.
+                    type: string
+                  timezone:
+                    description: The timezone for the specified team. Available values
+                      are `utc`, `browser`, or an empty string for the default.
+                    type: string
                 required:
-                - logsInstanceId
-                - metricsInstanceId
-                - metricsPublisherKeySecretRef
-                - stackId
+                - teamId
                 type: object
               providerConfigRef:
                 default:
@@ -145,14 +126,11 @@ spec:
             - forProvider
             type: object
           status:
-            description: SyntheticMonitoringInstallationStatus defines the observed
-              state of SyntheticMonitoringInstallation.
+            description: TeamPreferencesStatus defines the observed state of TeamPreferences.
             properties:
               atProvider:
                 properties:
                   id:
-                    type: string
-                  smAccessToken:
                     type: string
                 type: object
               conditions:
