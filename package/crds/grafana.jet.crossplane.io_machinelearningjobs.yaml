@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: teampreferences.grafana.grafana.jet.crossplane.io
+  name: machinelearningjobs.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: TeamPreferences
-    listKind: TeamPreferencesList
-    plural: teampreferences
-    singular: teampreferences
+    kind: MachineLearningJob
+    listKind: MachineLearningJobList
+    plural: machinelearningjobs
+    singular: machinelearningjob
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: TeamPreferences is the Schema for the TeamPreferencess API
+        description: MachineLearningJob is the Schema for the MachineLearningJobs
+          API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +51,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: TeamPreferencesSpec defines the desired state of TeamPreferences
+            description: MachineLearningJobSpec defines the desired state of MachineLearningJob
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,23 +64,50 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  homeDashboardId:
-                    description: The numeric ID of the dashboard to display when a
-                      team member logs in.
+                  datasourceId:
+                    description: The id of the datasource to query.
                     type: number
-                  teamId:
-                    description: The numeric team ID.
+                  datasourceType:
+                    description: The type of datasource being queried. Currently allowed
+                      values are prometheus, graphite, loki, postgres, and datadog.
+                    type: string
+                  description:
+                    description: A description of the job.
+                    type: string
+                  hyperParams:
+                    additionalProperties:
+                      type: string
+                    description: The hyperparameters used to fine tune the algorithm.
+                      See https://grafana.com/docs/grafana-cloud/machine-learning/models/
+                      for the full list of available hyperparameters. Defaults to
+                      `map[]`.
+                    type: object
+                  interval:
+                    description: The data interval in seconds to train the data on.
+                      Defaults to `300`.
                     type: number
-                  theme:
-                    description: The theme for the specified team. Available themes
-                      are `light`, `dark`, or an empty string for the default theme.
+                  metric:
+                    description: The metric used to query the job results.
                     type: string
-                  timezone:
-                    description: The timezone for the specified team. Available values
-                      are `utc`, `browser`, or an empty string for the default.
+                  name:
+                    description: The name of the job.
                     type: string
+                  queryParams:
+                    additionalProperties:
+                      type: string
+                    description: An object representing the query params to query
+                      Grafana with.
+                    type: object
+                  trainingWindow:
+                    description: The data interval in seconds to train the data on.
+                      Defaults to `7776000`.
+                    type: number
                 required:
-                - teamId
+                - datasourceId
+                - datasourceType
+                - metric
+                - name
+                - queryParams
                 type: object
               providerConfigRef:
                 default:
@@ -126,7 +154,7 @@ spec:
             - forProvider
             type: object
           status:
-            description: TeamPreferencesStatus defines the observed state of TeamPreferences.
+            description: MachineLearningJobStatus defines the observed state of MachineLearningJob.
             properties:
               atProvider:
                 properties:

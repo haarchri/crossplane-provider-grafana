@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: teams.grafana.grafana.jet.crossplane.io
+  name: librarypanels.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: Team
-    listKind: TeamList
-    plural: teams
-    singular: team
+    kind: LibraryPanel
+    listKind: LibraryPanelList
+    plural: librarypanels
+    singular: librarypanel
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Team is the Schema for the Teams API
+        description: LibraryPanel is the Schema for the LibraryPanels API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: TeamSpec defines the desired state of Team
+            description: LibraryPanelSpec defines the desired state of LibraryPanel
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,20 +63,25 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  email:
-                    description: An email address for the team.
+                  folderId:
+                    description: ID of the folder where the library panel is stored.
+                    type: number
+                  modelJson:
+                    description: The JSON model for the library panel.
                     type: string
-                  members:
-                    description: 'A set of email addresses corresponding to users
-                      who should be given membership to the team. Note: users specified
-                      here must already exist in Grafana.'
-                    items:
-                      type: string
-                    type: array
                   name:
-                    description: The display name for the Grafana team created.
+                    description: Name of the library panel.
+                    type: string
+                  uid:
+                    description: The unique identifier (UID) of a library panel uniquely
+                      identifies library panels between multiple Grafana installs.
+                      It’s automatically generated unless you specify it during library
+                      panel creation.The UID provides consistent URLs for accessing
+                      library panels and when syncing library panels between multiple
+                      Grafana installs.
                     type: string
                 required:
+                - modelJson
                 - name
                 type: object
               providerConfigRef:
@@ -124,13 +129,33 @@ spec:
             - forProvider
             type: object
           status:
-            description: TeamStatus defines the observed state of Team.
+            description: LibraryPanelStatus defines the observed state of LibraryPanel.
             properties:
               atProvider:
                 properties:
+                  created:
+                    type: string
+                  dashboardIds:
+                    items:
+                      type: number
+                    type: array
+                  description:
+                    type: string
+                  folderName:
+                    type: string
+                  folderUid:
+                    type: string
                   id:
                     type: string
-                  teamId:
+                  orgId:
+                    type: number
+                  panelId:
+                    type: number
+                  type:
+                    type: string
+                  updated:
+                    type: string
+                  version:
                     type: number
                 type: object
               conditions:

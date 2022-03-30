@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: teamexternalgroups.grafana.grafana.jet.crossplane.io
+  name: datasourcepermissions.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: TeamExternalGroup
-    listKind: TeamExternalGroupList
-    plural: teamexternalgroups
-    singular: teamexternalgroup
+    kind: DataSourcePermission
+    listKind: DataSourcePermissionList
+    plural: datasourcepermissions
+    singular: datasourcepermission
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: TeamExternalGroup is the Schema for the TeamExternalGroups API
+        description: DataSourcePermission is the Schema for the DataSourcePermissions
+          API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +51,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: TeamExternalGroupSpec defines the desired state of TeamExternalGroup
+            description: DataSourcePermissionSpec defines the desired state of DataSourcePermission
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,17 +64,33 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  groups:
-                    description: The team external groups list
-                    items:
-                      type: string
-                    type: array
-                  teamId:
-                    description: The Team ID
+                  datasourceId:
+                    description: ID of the datasource to apply permissions to.
                     type: number
+                  permissions:
+                    description: The permission items to add/update. Items that are
+                      omitted from the list will be removed.
+                    items:
+                      properties:
+                        permission:
+                          description: Permission to associate with item. Must be
+                            `Query`.
+                          type: string
+                        teamId:
+                          description: ID of the team to manage permissions for. Defaults
+                            to `0`.
+                          type: number
+                        userId:
+                          description: ID of the user to manage permissions for. Defaults
+                            to `0`.
+                          type: number
+                      required:
+                      - permission
+                      type: object
+                    type: array
                 required:
-                - groups
-                - teamId
+                - datasourceId
+                - permissions
                 type: object
               providerConfigRef:
                 default:
@@ -120,7 +137,8 @@ spec:
             - forProvider
             type: object
           status:
-            description: TeamExternalGroupStatus defines the observed state of TeamExternalGroup.
+            description: DataSourcePermissionStatus defines the observed state of
+              DataSourcePermission.
             properties:
               atProvider:
                 properties:

@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: dashboards.grafana.grafana.jet.crossplane.io
+  name: dashboardpermissions.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: Dashboard
-    listKind: DashboardList
-    plural: dashboards
-    singular: dashboard
+    kind: DashboardPermission
+    listKind: DashboardPermissionList
+    plural: dashboardpermissions
+    singular: dashboardpermission
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,8 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Dashboard is the Schema for the Dashboards API
+        description: DashboardPermission is the Schema for the DashboardPermissions
+          API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +51,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: DashboardSpec defines the desired state of Dashboard
+            description: DashboardPermissionSpec defines the desired state of DashboardPermission
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,46 +64,37 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  configJson:
-                    description: The complete dashboard model JSON.
-                    type: string
-                  folder:
-                    description: The id of the folder to save the dashboard in. This
-                      attribute is a string to reflect the type of the folder's id.
-                    type: string
-                  folderRef:
-                    description: A Reference to a named object.
-                    properties:
-                      name:
-                        description: Name of the referenced object.
-                        type: string
-                    required:
-                    - name
-                    type: object
-                  folderSelector:
-                    description: A Selector selects an object.
-                    properties:
-                      matchControllerRef:
-                        description: MatchControllerRef ensures an object with the
-                          same controller reference as the selecting object is selected.
-                        type: boolean
-                      matchLabels:
-                        additionalProperties:
+                  dashboardId:
+                    description: ID of the dashboard to apply permissions to.
+                    type: number
+                  permissions:
+                    description: The permission items to add/update. Items that are
+                      omitted from the list will be removed.
+                    items:
+                      properties:
+                        permission:
+                          description: Permission to associate with item. Must be
+                            one of `View`, `Edit`, or `Admin`.
                           type: string
-                        description: MatchLabels ensures an object with matching labels
-                          is selected.
-                        type: object
-                    type: object
-                  message:
-                    description: Set a commit message for the version history.
-                    type: string
-                  overwrite:
-                    description: Set to true if you want to overwrite existing dashboard
-                      with newer version, same dashboard title in folder or same dashboard
-                      uid.
-                    type: boolean
+                        role:
+                          description: Manage permissions for `Viewer` or `Editor`
+                            roles.
+                          type: string
+                        teamId:
+                          description: ID of the team to manage permissions for. Defaults
+                            to `0`.
+                          type: number
+                        userId:
+                          description: ID of the user to manage permissions for. Defaults
+                            to `0`.
+                          type: number
+                      required:
+                      - permission
+                      type: object
+                    type: array
                 required:
-                - configJson
+                - dashboardId
+                - permissions
                 type: object
               providerConfigRef:
                 default:
@@ -149,20 +141,12 @@ spec:
             - forProvider
             type: object
           status:
-            description: DashboardStatus defines the observed state of Dashboard.
+            description: DashboardPermissionStatus defines the observed state of DashboardPermission.
             properties:
               atProvider:
                 properties:
-                  dashboardId:
-                    type: number
                   id:
                     type: string
-                  slug:
-                    type: string
-                  uid:
-                    type: string
-                  version:
-                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.

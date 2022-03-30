@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: organizations.grafana.grafana.jet.crossplane.io
+  name: playlists.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: Organization
-    listKind: OrganizationList
-    plural: organizations
-    singular: organization
+    kind: Playlist
+    listKind: PlaylistList
+    plural: playlists
+    singular: playlist
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Organization is the Schema for the Organizations API
+        description: Playlist is the Schema for the Playlists API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: OrganizationSpec defines the desired state of Organization
+            description: PlaylistSpec defines the desired state of Playlist
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,51 +63,30 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  adminUser:
-                    description: The login name of the configured default admin user
-                      for the Grafana installation. If unset, this value defaults
-                      to admin, the Grafana default. Grafana adds the default admin
-                      user to all organizations automatically upon creation, and this
-                      parameter keeps Terraform from removing it from organizations.
-                      Defaults to `admin`.
+                  interval:
                     type: string
-                  admins:
-                    description: 'A list of email addresses corresponding to users
-                      who should be given admin access to the organization. Note:
-                      users specified here must already exist in Grafana unless ''create_users''
-                      is set to true.'
+                  item:
                     items:
-                      type: string
-                    type: array
-                  createUsers:
-                    description: Whether or not to create Grafana users specified
-                      in the organization's membership if they don't already exist
-                      in Grafana. If unspecified, this parameter defaults to true,
-                      creating placeholder users with the name, login, and email set
-                      to the email of the user, and a random password. Setting this
-                      option to false will cause an error to be thrown for any users
-                      that do not already exist in Grafana. Defaults to `true`.
-                    type: boolean
-                  editors:
-                    description: 'A list of email addresses corresponding to users
-                      who should be given editor access to the organization. Note:
-                      users specified here must already exist in Grafana unless ''create_users''
-                      is set to true.'
-                    items:
-                      type: string
+                      properties:
+                        order:
+                          type: number
+                        title:
+                          type: string
+                        type:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                      - order
+                      - title
+                      type: object
                     type: array
                   name:
-                    description: The display name for the Grafana organization created.
+                    description: The name of the playlist.
                     type: string
-                  viewers:
-                    description: 'A list of email addresses corresponding to users
-                      who should be given viewer access to the organization. Note:
-                      users specified here must already exist in Grafana unless ''create_users''
-                      is set to true.'
-                    items:
-                      type: string
-                    type: array
                 required:
+                - interval
+                - item
                 - name
                 type: object
               providerConfigRef:
@@ -155,14 +134,14 @@ spec:
             - forProvider
             type: object
           status:
-            description: OrganizationStatus defines the observed state of Organization.
+            description: PlaylistStatus defines the observed state of Playlist.
             properties:
               atProvider:
                 properties:
                   id:
                     type: string
                   orgId:
-                    type: number
+                    type: string
                 type: object
               conditions:
                 description: Conditions of the resource.

@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: cloudstacks.grafana.grafana.jet.crossplane.io
+  name: teams.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: CloudStack
-    listKind: CloudStackList
-    plural: cloudstacks
-    singular: cloudstack
+    kind: Team
+    listKind: TeamList
+    plural: teams
+    singular: team
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: CloudStack is the Schema for the CloudStacks API
+        description: Team is the Schema for the Teams API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: CloudStackSpec defines the desired state of CloudStack
+            description: TeamSpec defines the desired state of Team
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,35 +63,21 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  description:
-                    description: Description of stack.
+                  email:
+                    description: An email address for the team.
                     type: string
+                  members:
+                    description: 'A set of email addresses corresponding to users
+                      who should be given membership to the team. Note: users specified
+                      here must already exist in Grafana.'
+                    items:
+                      type: string
+                    type: array
                   name:
-                    description: Name of stack. Conventionally matches the url of
-                      the instance (e.g. “<stack_slug>.grafana.net”).
+                    description: The display name for the Grafana team created.
                     type: string
-                  regionSlug:
-                    description: Region slug to assign to this stack. Changing region
-                      will destroy the existing stack and create a new one in the
-                      desired region
-                    type: string
-                  slug:
-                    description: Subdomain that the Grafana instance will be available
-                      at (i.e. setting slug to “<stack_slug>” will make the instance
-                      available at “https://<stack_slug>.grafana.net".
-                    type: string
-                  url:
-                    description: Custom URL for the Grafana instance. Must have a
-                      CNAME setup to point to `.grafana.net` before creating the stack
-                    type: string
-                  waitForReadiness:
-                    description: Whether to wait for readiness of the stack after
-                      creating it. The check is a HEAD request to the stack URL (Grafana
-                      instance). Defaults to `true`.
-                    type: boolean
                 required:
                 - name
-                - slug
                 type: object
               providerConfigRef:
                 default:
@@ -138,48 +124,14 @@ spec:
             - forProvider
             type: object
           status:
-            description: CloudStackStatus defines the observed state of CloudStack.
+            description: TeamStatus defines the observed state of Team.
             properties:
               atProvider:
                 properties:
-                  alertmanagerName:
-                    type: string
-                  alertmanagerStatus:
-                    type: string
-                  alertmanagerUrl:
-                    type: string
-                  alertmanagerUserId:
-                    type: number
                   id:
                     type: string
-                  logsName:
-                    type: string
-                  logsStatus:
-                    type: string
-                  logsUrl:
-                    type: string
-                  logsUserId:
+                  teamId:
                     type: number
-                  orgId:
-                    type: number
-                  orgName:
-                    type: string
-                  orgSlug:
-                    type: string
-                  prometheusName:
-                    type: string
-                  prometheusRemoteEndpoint:
-                    type: string
-                  prometheusRemoteWriteEndpoint:
-                    type: string
-                  prometheusStatus:
-                    type: string
-                  prometheusUrl:
-                    type: string
-                  prometheusUserId:
-                    type: number
-                  status:
-                    type: string
                 type: object
               conditions:
                 description: Conditions of the resource.

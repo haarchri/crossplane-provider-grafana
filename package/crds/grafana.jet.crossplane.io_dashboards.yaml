@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: cloudplugininstallations.grafana.grafana.jet.crossplane.io
+  name: dashboards.grafana.jet.crossplane.io
 spec:
-  group: grafana.grafana.jet.crossplane.io
+  group: grafana.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - grafanajet
-    kind: CloudPluginInstallation
-    listKind: CloudPluginInstallationList
-    plural: cloudplugininstallations
-    singular: cloudplugininstallation
+    kind: Dashboard
+    listKind: DashboardList
+    plural: dashboards
+    singular: dashboard
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,8 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: CloudPluginInstallation is the Schema for the CloudPluginInstallations
-          API
+        description: Dashboard is the Schema for the Dashboards API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -51,8 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: CloudPluginInstallationSpec defines the desired state of
-              CloudPluginInstallation
+            description: DashboardSpec defines the desired state of Dashboard
             properties:
               deletionPolicy:
                 default: Delete
@@ -65,10 +63,14 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  slug:
-                    description: Slug of the plugin to be installed.
+                  configJson:
+                    description: The complete dashboard model JSON.
                     type: string
-                  stackRef:
+                  folder:
+                    description: The id of the folder to save the dashboard in. This
+                      attribute is a string to reflect the type of the folder's id.
+                    type: string
+                  folderRef:
                     description: A Reference to a named object.
                     properties:
                       name:
@@ -77,7 +79,7 @@ spec:
                     required:
                     - name
                     type: object
-                  stackSelector:
+                  folderSelector:
                     description: A Selector selects an object.
                     properties:
                       matchControllerRef:
@@ -91,15 +93,16 @@ spec:
                           is selected.
                         type: object
                     type: object
-                  stackSlug:
-                    description: The stack id to which the plugin should be installed.
+                  message:
+                    description: Set a commit message for the version history.
                     type: string
-                  version:
-                    description: Version of the plugin to be installed.
-                    type: string
+                  overwrite:
+                    description: Set to true if you want to overwrite existing dashboard
+                      with newer version, same dashboard title in folder or same dashboard
+                      uid.
+                    type: boolean
                 required:
-                - slug
-                - version
+                - configJson
                 type: object
               providerConfigRef:
                 default:
@@ -146,13 +149,20 @@ spec:
             - forProvider
             type: object
           status:
-            description: CloudPluginInstallationStatus defines the observed state
-              of CloudPluginInstallation.
+            description: DashboardStatus defines the observed state of Dashboard.
             properties:
               atProvider:
                 properties:
+                  dashboardId:
+                    type: number
                   id:
                     type: string
+                  slug:
+                    type: string
+                  uid:
+                    type: string
+                  version:
+                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.
