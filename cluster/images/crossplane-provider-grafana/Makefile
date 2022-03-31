@@ -6,7 +6,7 @@ include ../../../build/makelib/common.mk
 
 # ====================================================================================
 #  Options
-DOCKER_REGISTRY ?= duologic
+DOCKER_REGISTRY ?= grafana
 IMAGE = $(BUILD_REGISTRY)/crossplane-provider-grafana-$(ARCH)
 OSBASEIMAGE = scratch
 include ../../../build/makelib/image.mk
