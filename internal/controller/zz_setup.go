@@ -22,11 +22,13 @@ import (
 	"github.com/crossplane/terrajet/pkg/controller"
 
 	alertnotification "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/alertnotification"
+	annotation "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/annotation"
 	apikey "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/apikey"
 	builtinroleassignment "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/builtinroleassignment"
 	cloudapikey "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/cloudapikey"
 	cloudplugininstallation "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/cloudplugininstallation"
 	cloudstack "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/cloudstack"
+	contactpoint "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/contactpoint"
 	dashboard "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/dashboard"
 	dashboardpermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/dashboardpermission"
 	datasource "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/datasource"
@@ -35,10 +37,25 @@ import (
 	folderpermission "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/folderpermission"
 	librarypanel "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/librarypanel"
 	machinelearningjob "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/machinelearningjob"
+	messagetemplate "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/messagetemplate"
+	mutetiming "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/mutetiming"
+	notificationpolicy "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/notificationpolicy"
+	oncallescalation "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/oncallescalation"
+	oncallescalationchain "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/oncallescalationchain"
+	oncallintegration "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/oncallintegration"
+	oncalloncallshift "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/oncalloncallshift"
+	oncalloutgoingwebhook "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/oncalloutgoingwebhook"
+	oncallroute "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/oncallroute"
+	oncallschedule "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/oncallschedule"
 	organization "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/organization"
+	organizationpreferences "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/organizationpreferences"
 	playlist "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/playlist"
 	report "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/report"
 	role "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/role"
+	roleassignment "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/roleassignment"
+	rulegroup "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/rulegroup"
+	serviceaccount "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/serviceaccount"
+	serviceaccounttoken "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/serviceaccounttoken"
 	syntheticmonitoringcheck "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringcheck"
 	syntheticmonitoringinstallation "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringinstallation"
 	syntheticmonitoringprobe "github.com/grafana/crossplane-provider-grafana/internal/controller/grafana/syntheticmonitoringprobe"
@@ -54,11 +71,13 @@ import (
 func Setup(mgr ctrl.Manager, o controller.Options) error {
 	for _, setup := range []func(ctrl.Manager, controller.Options) error{
 		alertnotification.Setup,
+		annotation.Setup,
 		apikey.Setup,
 		builtinroleassignment.Setup,
 		cloudapikey.Setup,
 		cloudplugininstallation.Setup,
 		cloudstack.Setup,
+		contactpoint.Setup,
 		dashboard.Setup,
 		dashboardpermission.Setup,
 		datasource.Setup,
@@ -67,10 +86,25 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		folderpermission.Setup,
 		librarypanel.Setup,
 		machinelearningjob.Setup,
+		messagetemplate.Setup,
+		mutetiming.Setup,
+		notificationpolicy.Setup,
+		oncallescalation.Setup,
+		oncallescalationchain.Setup,
+		oncallintegration.Setup,
+		oncalloncallshift.Setup,
+		oncalloutgoingwebhook.Setup,
+		oncallroute.Setup,
+		oncallschedule.Setup,
 		organization.Setup,
+		organizationpreferences.Setup,
 		playlist.Setup,
 		report.Setup,
 		role.Setup,
+		roleassignment.Setup,
+		rulegroup.Setup,
+		serviceaccount.Setup,
+		serviceaccounttoken.Setup,
 		syntheticmonitoringcheck.Setup,
 		syntheticmonitoringinstallation.Setup,
 		syntheticmonitoringprobe.Setup,

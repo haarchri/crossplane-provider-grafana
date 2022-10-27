@@ -75,8 +75,8 @@ spec:
                       Defaults to `false`.
                     type: boolean
                   layout:
-                    description: Layout of the report. `simple` or `grid` Defaults
-                      to `grid`.
+                    description: 'Layout of the report. Allowed values: `simple`,
+                      `grid`. Defaults to `grid`.'
                     type: string
                   message:
                     description: Message to be sent in the report.
@@ -85,8 +85,8 @@ spec:
                     description: Name of the report.
                     type: string
                   orientation:
-                    description: Orientation of the report. `landscape` or `portrait`
-                      Defaults to `landscape`.
+                    description: 'Orientation of the report. Allowed values: `landscape`,
+                      `portrait`. Defaults to `landscape`.'
                     type: string
                   recipients:
                     description: List of recipients of the report.
@@ -110,9 +110,13 @@ spec:
                             that times will be saved as UTC in Grafana.
                           type: string
                         frequency:
-                          description: Frequency of the report. One of `never`, `once`,
-                            `hourly`, `daily`, `weekly`, `monthly` or `custom`.
+                          description: 'Frequency of the report. Allowed values: `never`,
+                            `once`, `hourly`, `daily`, `weekly`, `monthly`, `custom`.'
                           type: string
+                        lastDayOfMonth:
+                          description: Send the report on the last day of the month
+                            Defaults to `false`.
+                          type: boolean
                         startTime:
                           description: Start time of the report. If empty, the start
                             date will be set to the creation time. Note that times

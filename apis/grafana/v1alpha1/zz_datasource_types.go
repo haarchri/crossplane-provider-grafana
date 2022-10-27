@@ -39,7 +39,7 @@ type DataSourceParameters struct {
 	// +kubebuilder:validation:Optional
 	BasicAuthEnabled *bool `json:"basicAuthEnabled,omitempty" tf:"basic_auth_enabled,omitempty"`
 
-	// Basic auth password. Defaults to ``.
+	// Basic auth password. Deprecated:Use secure_json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes. This attribute is removed in Grafana 9.0+. Defaults to ``.
 	// +kubebuilder:validation:Optional
 	BasicAuthPasswordSecretRef *v1.SecretKeySelector `json:"basicAuthPasswordSecretRef,omitempty" tf:"-"`
 
@@ -59,20 +59,29 @@ type DataSourceParameters struct {
 	// +kubebuilder:validation:Optional
 	IsDefault *bool `json:"isDefault,omitempty" tf:"is_default,omitempty"`
 
-	// (Required by some data source types)
+	// (Required by some data source types). Deprecated: Use json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes.
 	// +kubebuilder:validation:Optional
 	JSONData []JSONDataParameters `json:"jsonData,omitempty" tf:"json_data,omitempty"`
+
+	// Serialized JSON string containing the json data. Replaces the json_data attribute, this attribute can be used to pass configuration options to the data source. To figure out what options a datasource has available, see its docs or inspect the network data when saving it from the Grafana UI.
+	// +kubebuilder:validation:Optional
+	JSONDataEncoded *string `json:"jsonDataEncoded,omitempty" tf:"json_data_encoded,omitempty"`
 
 	// A unique name for the data source.
 	// +kubebuilder:validation:Required
 	Name *string `json:"name" tf:"name,omitempty"`
 
-	// (Required by some data source types) The password to use to authenticate to the data source. Defaults to ``.
+	// (Required by some data source types) The password to use to authenticate to the data source. Deprecated: Use secure_json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes. This attribute is removed in Grafana 9.0+. Defaults to ``.
 	// +kubebuilder:validation:Optional
 	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
 
+	// Deprecated: Use secure_json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes.
 	// +kubebuilder:validation:Optional
 	SecureJSONData []SecureJSONDataParameters `json:"secureJsonData,omitempty" tf:"secure_json_data,omitempty"`
+
+	// Serialized JSON string containing the secure json data. Replaces the secure_json_data attribute, this attribute can be used to pass secure configuration options to the data source. To figure out what options a datasource has available, see its docs or inspect the network data when saving it from the Grafana UI.
+	// +kubebuilder:validation:Optional
+	SecureJSONDataEncodedSecretRef *v1.SecretKeySelector `json:"secureJsonDataEncodedSecretRef,omitempty" tf:"-"`
 
 	// The data source type. Must be one of the supported data source keywords.
 	// +kubebuilder:validation:Required
@@ -114,6 +123,10 @@ type JSONDataObservation struct {
 
 type JSONDataParameters struct {
 
+	// (Prometheus) The name of the Alertmanager datasource to manage alerts via UI
+	// +kubebuilder:validation:Optional
+	AlertmanagerUID *string `json:"alertmanagerUid,omitempty" tf:"alertmanager_uid,omitempty"`
+
 	// (CloudWatch, Athena) The ARN of the role to be assumed by Grafana when using the CloudWatch or Athena data source.
 	// +kubebuilder:validation:Optional
 	AssumeRoleArn *string `json:"assumeRoleArn,omitempty" tf:"assume_role_arn,omitempty"`
@@ -133,6 +146,14 @@ type JSONDataParameters struct {
 	// (Stackdriver) Service account email address.
 	// +kubebuilder:validation:Optional
 	ClientEmail *string `json:"clientEmail,omitempty" tf:"client_email,omitempty"`
+
+	// (Azure Monitor) The service account client id.
+	// +kubebuilder:validation:Optional
+	ClientID *string `json:"clientId,omitempty" tf:"client_id,omitempty"`
+
+	// (Azure Monitor) The cloud name.
+	// +kubebuilder:validation:Optional
+	CloudName *string `json:"cloudName,omitempty" tf:"cloud_name,omitempty"`
 
 	// (MySQL, PostgreSQL, and MSSQL) Maximum amount of time in seconds a connection may be reused (Grafana v5.4+).
 	// +kubebuilder:validation:Optional
@@ -186,6 +207,10 @@ type JSONDataParameters struct {
 	// +kubebuilder:validation:Optional
 	HTTPMethod *string `json:"httpMethod,omitempty" tf:"http_method,omitempty"`
 
+	// (Alertmanager) Implementation of Alertmanager. Either 'cortex' or 'prometheus'
+	// +kubebuilder:validation:Optional
+	Implementation *string `json:"implementation,omitempty" tf:"implementation,omitempty"`
+
 	// (Elasticsearch) Index date time format. nil(No Pattern), 'Hourly', 'Daily', 'Weekly', 'Monthly' or 'Yearly'.
 	// +kubebuilder:validation:Optional
 	Interval *string `json:"interval,omitempty" tf:"interval,omitempty"`
@@ -197,6 +222,10 @@ type JSONDataParameters struct {
 	// (Elasticsearch) Which field should be used as the log message.
 	// +kubebuilder:validation:Optional
 	LogMessageField *string `json:"logMessageField,omitempty" tf:"log_message_field,omitempty"`
+
+	// (Prometheus) Manage alerts.
+	// +kubebuilder:validation:Optional
+	ManageAlerts *bool `json:"manageAlerts,omitempty" tf:"manage_alerts,omitempty"`
 
 	// (Elasticsearch) Maximum number of concurrent shard requests.
 	// +kubebuilder:validation:Optional
@@ -266,6 +295,10 @@ type JSONDataParameters struct {
 	// +kubebuilder:validation:Optional
 	Sigv4Region *string `json:"sigv4Region,omitempty" tf:"sigv4_region,omitempty"`
 
+	// (Azure Monitor) The subscription id
+	// +kubebuilder:validation:Optional
+	SubscriptionID *string `json:"subscriptionId,omitempty" tf:"subscription_id,omitempty"`
+
 	// (All) Enable TLS authentication using client cert configured in secure json data.
 	// +kubebuilder:validation:Optional
 	TLSAuth *bool `json:"tlsAuth,omitempty" tf:"tls_auth,omitempty"`
@@ -282,11 +315,15 @@ type JSONDataParameters struct {
 	// +kubebuilder:validation:Optional
 	TLSSkipVerify *bool `json:"tlsSkipVerify,omitempty" tf:"tls_skip_verify,omitempty"`
 
+	// (Azure Monitor) Service account tenant ID.
+	// +kubebuilder:validation:Optional
+	TenantID *string `json:"tenantId,omitempty" tf:"tenant_id,omitempty"`
+
 	// (Elasticsearch) Which field that should be used as timestamp.
 	// +kubebuilder:validation:Optional
 	TimeField *string `json:"timeField,omitempty" tf:"time_field,omitempty"`
 
-	// (Prometheus, Elasticsearch, InfluxDB, MySQL, PostgreSQL, and MSSQL) Lowest interval/step value that should be used for this data source.
+	// (Prometheus, Elasticsearch, InfluxDB, MySQL, PostgreSQL, and MSSQL) Lowest interval/step value that should be used for this data source. Sometimes called "Scrape Interval" in the Grafana UI.
 	// +kubebuilder:validation:Optional
 	TimeInterval *string `json:"timeInterval,omitempty" tf:"time_interval,omitempty"`
 
@@ -297,6 +334,10 @@ type JSONDataParameters struct {
 	// (Stackdriver) The token URI used, provided in the service account key.
 	// +kubebuilder:validation:Optional
 	TokenURI *string `json:"tokenUri,omitempty" tf:"token_uri,omitempty"`
+
+	// (Cloudwatch) The X-Ray datasource uid to associate to this Cloudwatch datasource.
+	// +kubebuilder:validation:Optional
+	TracingDatasourceUID *string `json:"tracingDatasourceUid,omitempty" tf:"tracing_datasource_uid,omitempty"`
 
 	// (OpenTSDB) Resolution.
 	// +kubebuilder:validation:Optional
@@ -313,6 +354,10 @@ type JSONDataParameters struct {
 	// (Athena) Workgroup to use.
 	// +kubebuilder:validation:Optional
 	Workgroup *string `json:"workgroup,omitempty" tf:"workgroup,omitempty"`
+
+	// (Elasticsearch) Enable X-Pack support.
+	// +kubebuilder:validation:Optional
+	XpackEnabled *bool `json:"xpackEnabled,omitempty" tf:"xpack_enabled,omitempty"`
 }
 
 type SecureJSONDataObservation struct {
@@ -335,6 +380,10 @@ type SecureJSONDataParameters struct {
 	// (All) Password to use for basic authentication.
 	// +kubebuilder:validation:Optional
 	BasicAuthPasswordSecretRef *v1.SecretKeySelector `json:"basicAuthPasswordSecretRef,omitempty" tf:"-"`
+
+	// (Azure Monitor) Client secret for authentication.
+	// +kubebuilder:validation:Optional
+	ClientSecretSecretRef *v1.SecretKeySelector `json:"clientSecretSecretRef,omitempty" tf:"-"`
 
 	// (All) Password to use for authentication.
 	// +kubebuilder:validation:Optional

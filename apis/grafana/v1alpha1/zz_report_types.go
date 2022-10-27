@@ -43,7 +43,7 @@ type ReportParameters struct {
 	// +kubebuilder:validation:Optional
 	IncludeTableCsv *bool `json:"includeTableCsv,omitempty" tf:"include_table_csv,omitempty"`
 
-	// Layout of the report. `simple` or `grid` Defaults to `grid`.
+	// Layout of the report. Allowed values: `simple`, `grid`. Defaults to `grid`.
 	// +kubebuilder:validation:Optional
 	Layout *string `json:"layout,omitempty" tf:"layout,omitempty"`
 
@@ -55,7 +55,7 @@ type ReportParameters struct {
 	// +kubebuilder:validation:Required
 	Name *string `json:"name" tf:"name,omitempty"`
 
-	// Orientation of the report. `landscape` or `portrait` Defaults to `landscape`.
+	// Orientation of the report. Allowed values: `landscape`, `portrait`. Defaults to `landscape`.
 	// +kubebuilder:validation:Optional
 	Orientation *string `json:"orientation,omitempty" tf:"orientation,omitempty"`
 
@@ -90,9 +90,13 @@ type ScheduleParameters struct {
 	// +kubebuilder:validation:Optional
 	EndTime *string `json:"endTime,omitempty" tf:"end_time,omitempty"`
 
-	// Frequency of the report. One of `never`, `once`, `hourly`, `daily`, `weekly`, `monthly` or `custom`.
+	// Frequency of the report. Allowed values: `never`, `once`, `hourly`, `daily`, `weekly`, `monthly`, `custom`.
 	// +kubebuilder:validation:Required
 	Frequency *string `json:"frequency" tf:"frequency,omitempty"`
+
+	// Send the report on the last day of the month Defaults to `false`.
+	// +kubebuilder:validation:Optional
+	LastDayOfMonth *bool `json:"lastDayOfMonth,omitempty" tf:"last_day_of_month,omitempty"`
 
 	// Start time of the report. If empty, the start date will be set to the creation time. Note that times will be saved as UTC in Grafana.
 	// +kubebuilder:validation:Optional

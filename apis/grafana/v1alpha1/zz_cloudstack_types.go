@@ -34,6 +34,14 @@ type CloudStackObservation struct {
 
 	AlertmanagerUserID *float64 `json:"alertmanagerUserId,omitempty" tf:"alertmanager_user_id,omitempty"`
 
+	GraphiteName *string `json:"graphiteName,omitempty" tf:"graphite_name,omitempty"`
+
+	GraphiteStatus *string `json:"graphiteStatus,omitempty" tf:"graphite_status,omitempty"`
+
+	GraphiteURL *string `json:"graphiteUrl,omitempty" tf:"graphite_url,omitempty"`
+
+	GraphiteUserID *float64 `json:"graphiteUserId,omitempty" tf:"graphite_user_id,omitempty"`
+
 	ID *string `json:"id,omitempty" tf:"id,omitempty"`
 
 	LogsName *string `json:"logsName,omitempty" tf:"logs_name,omitempty"`
@@ -63,6 +71,14 @@ type CloudStackObservation struct {
 	PrometheusUserID *float64 `json:"prometheusUserId,omitempty" tf:"prometheus_user_id,omitempty"`
 
 	Status *string `json:"status,omitempty" tf:"status,omitempty"`
+
+	TracesName *string `json:"tracesName,omitempty" tf:"traces_name,omitempty"`
+
+	TracesStatus *string `json:"tracesStatus,omitempty" tf:"traces_status,omitempty"`
+
+	TracesURL *string `json:"tracesUrl,omitempty" tf:"traces_url,omitempty"`
+
+	TracesUserID *float64 `json:"tracesUserId,omitempty" tf:"traces_user_id,omitempty"`
 }
 
 type CloudStackParameters struct {
@@ -92,6 +108,10 @@ type CloudStackParameters struct {
 	// Whether to wait for readiness of the stack after creating it. The check is a HEAD request to the stack URL (Grafana instance). Defaults to `true`.
 	// +kubebuilder:validation:Optional
 	WaitForReadiness *bool `json:"waitForReadiness,omitempty" tf:"wait_for_readiness,omitempty"`
+
+	// How long to wait for readiness (if enabled). Defaults to `5m0s`.
+	// +kubebuilder:validation:Optional
+	WaitForReadinessTimeout *string `json:"waitForReadinessTimeout,omitempty" tf:"wait_for_readiness_timeout,omitempty"`
 }
 
 // CloudStackSpec defines the desired state of CloudStack

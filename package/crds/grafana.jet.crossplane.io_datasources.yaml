@@ -72,7 +72,10 @@ spec:
                       Defaults to `false`.
                     type: boolean
                   basicAuthPasswordSecretRef:
-                    description: Basic auth password. Defaults to ``.
+                    description: Basic auth password. Deprecated:Use secure_json_data_encoded
+                      instead. It supports arbitrary JSON data, and therefore all
+                      attributes. This attribute is removed in Grafana 9.0+. Defaults
+                      to ``.
                     properties:
                       key:
                         description: The key to select.
@@ -122,9 +125,15 @@ spec:
                       only be `true` to a single data source. Defaults to `false`.
                     type: boolean
                   jsonData:
-                    description: (Required by some data source types)
+                    description: '(Required by some data source types). Deprecated:
+                      Use json_data_encoded instead. It supports arbitrary JSON data,
+                      and therefore all attributes.'
                     items:
                       properties:
+                        alertmanagerUid:
+                          description: (Prometheus) The name of the Alertmanager datasource
+                            to manage alerts via UI
+                          type: string
                         assumeRoleArn:
                           description: (CloudWatch, Athena) The ARN of the role to
                             be assumed by Grafana when using the CloudWatch or Athena
@@ -143,6 +152,13 @@ spec:
                           type: string
                         clientEmail:
                           description: (Stackdriver) Service account email address.
+                          type: string
+                        clientId:
+                          description: (Azure Monitor) The service account client
+                            id.
+                          type: string
+                        cloudName:
+                          description: (Azure Monitor) The cloud name.
                           type: string
                         connMaxLifetime:
                           description: (MySQL, PostgreSQL, and MSSQL) Maximum amount
@@ -205,6 +221,10 @@ spec:
                           description: (Prometheus) HTTP method to use for making
                             requests.
                           type: string
+                        implementation:
+                          description: (Alertmanager) Implementation of Alertmanager.
+                            Either 'cortex' or 'prometheus'
+                          type: string
                         interval:
                           description: (Elasticsearch) Index date time format. nil(No
                             Pattern), 'Hourly', 'Daily', 'Weekly', 'Monthly' or 'Yearly'.
@@ -217,6 +237,9 @@ spec:
                           description: (Elasticsearch) Which field should be used
                             as the log message.
                           type: string
+                        manageAlerts:
+                          description: (Prometheus) Manage alerts.
+                          type: boolean
                         maxConcurrentShardRequests:
                           description: (Elasticsearch) Maximum number of concurrent
                             shard requests.
@@ -288,6 +311,12 @@ spec:
                           description: (PostgreSQL) SSLmode. 'disable', 'require',
                             'verify-ca' or 'verify-full'.
                           type: string
+                        subscriptionId:
+                          description: (Azure Monitor) The subscription id
+                          type: string
+                        tenantId:
+                          description: (Azure Monitor) Service account tenant ID.
+                          type: string
                         timeField:
                           description: (Elasticsearch) Which field that should be
                             used as timestamp.
@@ -295,7 +324,8 @@ spec:
                         timeInterval:
                           description: (Prometheus, Elasticsearch, InfluxDB, MySQL,
                             PostgreSQL, and MSSQL) Lowest interval/step value that
-                            should be used for this data source.
+                            should be used for this data source. Sometimes called
+                            "Scrape Interval" in the Grafana UI.
                           type: string
                         timescaledb:
                           description: (PostgreSQL) Enable usage of TimescaleDB extension.
@@ -319,6 +349,10 @@ spec:
                           description: (Stackdriver) The token URI used, provided
                             in the service account key.
                           type: string
+                        tracingDatasourceUid:
+                          description: (Cloudwatch) The X-Ray datasource uid to associate
+                            to this Cloudwatch datasource.
+                          type: string
                         tsdbResolution:
                           description: (OpenTSDB) Resolution.
                           type: number
@@ -331,14 +365,27 @@ spec:
                         workgroup:
                           description: (Athena) Workgroup to use.
                           type: string
+                        xpackEnabled:
+                          description: (Elasticsearch) Enable X-Pack support.
+                          type: boolean
                       type: object
                     type: array
+                  jsonDataEncoded:
+                    description: Serialized JSON string containing the json data.
+                      Replaces the json_data attribute, this attribute can be used
+                      to pass configuration options to the data source. To figure
+                      out what options a datasource has available, see its docs or
+                      inspect the network data when saving it from the Grafana UI.
+                    type: string
                   name:
                     description: A unique name for the data source.
                     type: string
                   passwordSecretRef:
-                    description: (Required by some data source types) The password
-                      to use to authenticate to the data source. Defaults to ``.
+                    description: '(Required by some data source types) The password
+                      to use to authenticate to the data source. Deprecated: Use secure_json_data_encoded
+                      instead. It supports arbitrary JSON data, and therefore all
+                      attributes. This attribute is removed in Grafana 9.0+. Defaults
+                      to ``.'
                     properties:
                       key:
                         description: The key to select.
@@ -355,6 +402,8 @@ spec:
                     - namespace
                     type: object
                   secureJsonData:
+                    description: 'Deprecated: Use secure_json_data_encoded instead.
+                      It supports arbitrary JSON data, and therefore all attributes.'
                     items:
                       properties:
                         accessKeySecretRef:
@@ -412,6 +461,23 @@ spec:
                           type: object
                         basicAuthPasswordSecretRef:
                           description: (All) Password to use for basic authentication.
+                          properties:
+                            key:
+                              description: The key to select.
+                              type: string
+                            name:
+                              description: Name of the secret.
+                              type: string
+                            namespace:
+                              description: Namespace of the secret.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          - namespace
+                          type: object
+                        clientSecretSecretRef:
+                          description: (Azure Monitor) Client secret for authentication.
                           properties:
                             key:
                               description: The key to select.
@@ -569,6 +635,28 @@ spec:
                           type: object
                       type: object
                     type: array
+                  secureJsonDataEncodedSecretRef:
+                    description: Serialized JSON string containing the secure json
+                      data. Replaces the secure_json_data attribute, this attribute
+                      can be used to pass secure configuration options to the data
+                      source. To figure out what options a datasource has available,
+                      see its docs or inspect the network data when saving it from
+                      the Grafana UI.
+                    properties:
+                      key:
+                        description: The key to select.
+                        type: string
+                      name:
+                        description: Name of the secret.
+                        type: string
+                      namespace:
+                        description: Namespace of the secret.
+                        type: string
+                    required:
+                    - key
+                    - name
+                    - namespace
+                    type: object
                   type:
                     description: The data source type. Must be one of the supported
                       data source keywords.

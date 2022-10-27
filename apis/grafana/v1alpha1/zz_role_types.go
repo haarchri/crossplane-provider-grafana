@@ -35,9 +35,21 @@ type RoleParameters struct {
 	// +kubebuilder:validation:Optional
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
+	// Display name of the role. Available with Grafana 8.5+.
+	// +kubebuilder:validation:Optional
+	DisplayName *string `json:"displayName,omitempty" tf:"display_name,omitempty"`
+
 	// Boolean to state whether the role is available across all organizations or not. Defaults to `false`.
 	// +kubebuilder:validation:Optional
 	Global *bool `json:"global,omitempty" tf:"global,omitempty"`
+
+	// Group of the role. Available with Grafana 8.5+.
+	// +kubebuilder:validation:Optional
+	Group *string `json:"group,omitempty" tf:"group,omitempty"`
+
+	// Boolean to state whether the role should be visible in the Grafana UI or not. Available with Grafana 8.5+. Defaults to `false`.
+	// +kubebuilder:validation:Optional
+	Hidden *bool `json:"hidden,omitempty" tf:"hidden,omitempty"`
 
 	// Name of the role
 	// +kubebuilder:validation:Required

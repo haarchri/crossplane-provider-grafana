@@ -89,6 +89,10 @@ spec:
                       creating it. The check is a HEAD request to the stack URL (Grafana
                       instance). Defaults to `true`.
                     type: boolean
+                  waitForReadinessTimeout:
+                    description: How long to wait for readiness (if enabled). Defaults
+                      to `5m0s`.
+                    type: string
                 required:
                 - name
                 - slug
@@ -150,6 +154,14 @@ spec:
                     type: string
                   alertmanagerUserId:
                     type: number
+                  graphiteName:
+                    type: string
+                  graphiteStatus:
+                    type: string
+                  graphiteUrl:
+                    type: string
+                  graphiteUserId:
+                    type: number
                   id:
                     type: string
                   logsName:
@@ -180,6 +192,14 @@ spec:
                     type: number
                   status:
                     type: string
+                  tracesName:
+                    type: string
+                  tracesStatus:
+                    type: string
+                  tracesUrl:
+                    type: string
+                  tracesUserId:
+                    type: number
                 type: object
               conditions:
                 description: Conditions of the resource.

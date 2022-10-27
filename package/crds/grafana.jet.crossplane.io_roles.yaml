@@ -66,9 +66,21 @@ spec:
                   description:
                     description: Description of the role.
                     type: string
+                  displayName:
+                    description: Display name of the role. Available with Grafana
+                      8.5+.
+                    type: string
                   global:
                     description: Boolean to state whether the role is available across
                       all organizations or not. Defaults to `false`.
+                    type: boolean
+                  group:
+                    description: Group of the role. Available with Grafana 8.5+.
+                    type: string
+                  hidden:
+                    description: Boolean to state whether the role should be visible
+                      in the Grafana UI or not. Available with Grafana 8.5+. Defaults
+                      to `false`.
                     type: boolean
                   name:
                     description: Name of the role
